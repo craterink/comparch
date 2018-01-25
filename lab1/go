@@ -1,0 +1,4 @@
+#!/bin/bash
+gcc *.c *.h -o lab1
+./lab1 in.txt out.txt
+echo EXIT CODE: $?

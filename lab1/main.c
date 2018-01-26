@@ -2,17 +2,19 @@
 #include "error.h"
 #include "parse.h"
 #include "num.h"
+#include "symtable.h"
 
 FILE* infile = NULL;
 FILE* outfile = NULL;
 int numLines = 0;
 
-void assess(char * line) {
-	printf("%s\n", line);
+void assess(char *label, char * opcode, char * arg1,
+		char * arg2, char * arg3, char * arg4) {
 	numLines++;
 }
 
-void doForEachLine(FILE * inFile, void (*func)(char *)) {
+void doForEachLine(FILE * inFile, void (*func)(char *, char *, char *,
+														char *, char *, char *)) {
 	char lLine[MAX_LINE_LENGTH + 1], *lLabel, *lOpcode, *lArg1,
 		 *lArg2, *lArg3, *lArg4;
 	int lRet;
@@ -22,7 +24,7 @@ void doForEachLine(FILE * inFile, void (*func)(char *)) {
 				&lOpcode, &lArg1, &lArg2, &lArg3, &lArg4 );
 		if( lRet != DONE && lRet != EMPTY_LINE )
 		{
-			func(lLine);
+			func(lLabel, lOpcode, lArg1, lArg2, lArg3, lArg4);
 		}
 	} while( lRet != DONE );
 }
@@ -64,7 +66,8 @@ void parseArgs(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
 	parseArgs(argc, argv);
 
-	doForEachLine(infile, assess);
+	initSymTableBldr();
+	doForEachLine(infile, buildSymTable);
 
 	int * instrs = malloc(sizeof(int) * numLines);
 	instrs[0] = 12;

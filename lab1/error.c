@@ -1,5 +1,5 @@
 #include "error.h"
 
-void error(Error errnum) {
+void error(enum Error errnum) {
 	exit(errnum);
 }

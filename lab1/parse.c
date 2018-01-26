@@ -2,6 +2,7 @@
 #include <regex.h>
 
 #define OPCODE_REGEX "^(ADD|AND|BR|BRN|BRZ|BRP|BRNP|BRZP|BRNZ|BRNZP|HALT|JMP|JSR|JSRR|LDB|LDW|LEA|NOP|NOT|RET|LSHF|RSHFL|RSHFA|RTI|STB|STW|TRAP|XOR)$"
+#define VALID_LABEL_REGEX "^[a-wyz0-9][a-z0-9]{0,19}$"
 
 int
 readAndParse( FILE * pInfile, char * pLine, char ** pLabel, char
@@ -55,19 +56,31 @@ readAndParse( FILE * pInfile, char * pLine, char ** pLabel, char
    return( OK );
 }
 
-int isOpcode(char * str) {
+int checkRegexMatch(char * regexStr, char * str) {
 	if (str == NULL) return -1;
 	regex_t regex;
-	int ret = regcomp(&regex, OPCODE_REGEX, REG_EXTENDED | REG_ICASE | REG_NOSUB);
+	int ret = regcomp(&regex, regexStr, REG_EXTENDED | REG_ICASE | REG_NOSUB);
 	if(ret) {
-		fprintf(stderr, "Could not compile opcode regex\n");
+		fprintf(stderr, "Could not compile regex.\n");
 		exit(4);
 	}
 	ret = regexec(&regex, str, 0, NULL, 0);
 	regfree(&regex);
 	if(!ret)
-		return 0;
+		return 1;
 	else if (ret == REG_NOMATCH)
-		return -1;
+		return 0;
+}
+
+int isValidLabel(char * str) {
+	return checkRegexMatch(VALID_LABEL_REGEX, str);	
+}
+
+int isOpcode(char * str) {
+	return checkRegexMatch(OPCODE_REGEX, str) ? 0 : -1;
+}
+
+int isValidAddr(int addr) {
+	return (addr >= 0 && addr <= MAX_ADDR);
 }
 

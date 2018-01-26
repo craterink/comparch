@@ -4,6 +4,7 @@
 #include "error.h"
 
 #define INIT_ADDR -1
+#define ADDRESSABILITY 2
 
 typedef char label_t[LABEL_MAX_STR_LEN];
 typedef struct sym_table_entry {
@@ -15,8 +16,9 @@ typedef struct sym_table_bldr {
 	int startAddr;
 	int finishAddr;
 	int currAddr;
+	
 	sym_table_entry_t symTable[MAX_NUM_LABELS];
-	int tableIndex;
+	int numSymbols;
 } sym_table_bldr_t;
 sym_table_bldr_t symTableBldr;
 
@@ -24,15 +26,16 @@ void initSymTableBldr(void) {
 	symTableBldr.startAddr = INIT_ADDR;
 	symTableBldr.finishAddr = INIT_ADDR;
 	symTableBldr.currAddr = INIT_ADDR;
+	symTableBldr.numSymbols = 0;
 }
 
 void addLabelToSymTable(char * label) {
-	if(symTableBldr.tableIndex >= MAX_NUM_LABELS) error(OTHER);
+	if(symTableBldr.numSymbols >= MAX_NUM_LABELS) error(OTHER);
 
 	sym_table_entry_t labelEntry;
 	strncpy((char *)labelEntry.label, label, LABEL_MAX_STR_LEN);
 	labelEntry.addr = symTableBldr.currAddr;
-	symTableBldr.symTable[symTableBldr.tableIndex++] = labelEntry;
+	symTableBldr.symTable[symTableBldr.numSymbols++] = labelEntry;
 }
 
 void buildSymTable(char * label, char * opcode, char * arg1,
@@ -47,8 +50,13 @@ void buildSymTable(char * label, char * opcode, char * arg1,
 		addLabelToSymTable(label);
 	}
 
+	// handle .end
+	if (!strcmp(opcode, END)) {
+		symTableBldr.finishAddr = symTableBldr.currAddr - ADDRESSABILITY;
+		symTableBldr.currAddr = INIT_ADDR;
+	}
 	// handle .orig
-	if (!strcmp(opcode, ORIG)) {
+	else if (!strcmp(opcode, ORIG)) {
 		if(symTableBldr.startAddr != INIT_ADDR // enforce .orig is first opcode 
 				|| symTableBldr.currAddr != INIT_ADDR
 				|| symTableBldr.finishAddr != INIT_ADDR) error(OTHER);
@@ -56,12 +64,8 @@ void buildSymTable(char * label, char * opcode, char * arg1,
 		symTableBldr.startAddr = toNum(arg1);
 		if(!isValidAddr(symTableBldr.startAddr)) error(OTHER);
 		symTableBldr.currAddr = symTableBldr.startAddr;
+	} 
+	else {	
+		symTableBldr.currAddr+= ADDRESSABILITY;
 	}
-
-	// handle .end
-	if (!strcmp(opcode, END)) {
-		symTableBldr.finishAddr = symTableBldr.currAddr - 1;
-	}
-
-	symTableBldr.currAddr++;
 }

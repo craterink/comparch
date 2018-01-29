@@ -10,13 +10,13 @@
 #include "parse.h"
 #include "num.h"
 #include "symtable.h"
-#include "opStrToNum.c"
+#include "opStrToNum.h"
 
 FILE* infile  = NULL;
 FILE* outfile = NULL;
 int numLines  = 0;
 
-void assess(char* label, char* opcode, char* arg1, char* arg2, cha* arg3, 
+void assess(char* label, char* opcode, char* arg1, char* arg2, char* arg3, 
             char* arg4){
   numLines++;
 }
@@ -80,7 +80,7 @@ int main(int argc, char* argv[]){
   int* instrs = malloc(sizeof(int) * numLines);
 
   /* Pass 2 */
-  infile.rewind(); /* Rewind the cursor to the beginning of the input file. */
+  rewind(infile); /* Rewind the cursor to the beginning of the input file. */
   doForEachLine(infile, assembleInstr);
   printOut(outfile, instrs, numLines);
 

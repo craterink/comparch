@@ -38,7 +38,7 @@ void addLabelToSymTable(char * label) {
 	symTableBldr.symTable[symTableBldr.numSymbols++] = labelEntry;
 }
 
-void buildSymTable(char * label, char * opcode, char * arg1,
+void buildSymTable(char* label, char * opcode, char * arg1,
 		char * arg2, char * arg3, char * arg4) {
 	if(strlen(label)) {
 		// check label validity, enforcing no label on .orig or .end

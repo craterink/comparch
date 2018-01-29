@@ -3,6 +3,7 @@
 
 #define OPCODE_REGEX "^(ADD|AND|BR|BRN|BRZ|BRP|BRNP|BRZP|BRNZ|BRNZP|HALT|JMP|JSR|JSRR|LDB|LDW|LEA|NOP|NOT|RET|LSHF|RSHFL|RSHFA|RTI|STB|STW|TRAP|XOR)$"
 #define VALID_LABEL_REGEX "^[a-wyz0-9][a-z0-9]{0,19}$"
+#define REGISTER_REGEX "^r[0-7]$"
 
 int
 readAndParse( FILE * pInfile, char * pLine, char ** pLabel, char
@@ -73,7 +74,8 @@ int checkRegexMatch(char * regexStr, char * str) {
 }
 
 int isValidLabel(char * str) {
-	return checkRegexMatch(VALID_LABEL_REGEX, str);	
+	return checkRegexMatch(VALID_LABEL_REGEX, str)
+		&& !checkRegexMatch(REGISTER_REGEX, str);	
 }
 
 int isOpcode(char * str) {

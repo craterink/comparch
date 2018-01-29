@@ -19,6 +19,7 @@ typedef struct sym_table_bldr {
 	
 	sym_table_entry_t symTable[MAX_NUM_LABELS];
 	int numSymbols;
+	int numIntrs;
 } sym_table_bldr_t;
 sym_table_bldr_t symTableBldr;
 
@@ -29,8 +30,31 @@ void initSymTableBldr(void) {
 	symTableBldr.numSymbols = 0;
 }
 
+int isSymbolInTable(char * label) {
+	int i;
+	for(i = 0; i < symTableBldr.numSymbols; i++) {
+		if(!strcmp(label, (char *)symTableBldr.symTable[i].label)) return 1;
+	}
+	return 0;
+}
+
+int symbolAddr(char * label) {
+	int i;
+	for(i = 0; i < symTableBldr.numSymbols; i++) {
+		if(!strcmp(label, (char *)symTableBldr.symTable[i].label)) 
+			return symTableBldr.symTable[i].addr;
+	}
+	return -1;
+}
+
+int getNumInstrs(void) {
+	return symTableBldr.numInstrs;
+}
+
 void addLabelToSymTable(char * label) {
-	if(symTableBldr.numSymbols >= MAX_NUM_LABELS) error(OTHER);
+	if(symTableBldr.numSymbols >= MAX_NUM_LABELS 
+			|| isSymbolInTable(label)) 
+		error(OTHER);
 
 	sym_table_entry_t labelEntry;
 	strncpy((char *)labelEntry.label, label, LABEL_MAX_STR_LEN);
@@ -68,4 +92,7 @@ void buildSymTable(char * label, char * opcode, char * arg1,
 	else {	
 		symTableBldr.currAddr+= ADDRESSABILITY;
 	}
+
+	// TODO: do some check before increasing?
+	symTableBldr.numInstrs++;
 }

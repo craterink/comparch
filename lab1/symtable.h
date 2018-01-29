@@ -13,3 +13,12 @@ void initSymTableBldr(void);
 
 void buildSymTable(char * label, char * opcode, char * arg1,
 		char * arg2, char * arg3, char * arg4);
+
+/**
+ * returns LABEL's addr if its in the table,
+ *  or -1 if not.
+ */
+int symbolAddr(char * label);
+
+
+int getNumInstrs(void);

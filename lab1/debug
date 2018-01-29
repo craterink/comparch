@@ -1,4 +1,0 @@
-#!/bin/bash
-gcc -g *.c *.h -o lab1debug
-gdb --args ./lab1debug in.txt out.txt
-

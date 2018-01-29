@@ -19,7 +19,7 @@ typedef struct sym_table_bldr {
 	
 	sym_table_entry_t symTable[MAX_NUM_LABELS];
 	int numSymbols;
-	int numIntrs;
+	int numInstrs;
 } sym_table_bldr_t;
 sym_table_bldr_t symTableBldr;
 

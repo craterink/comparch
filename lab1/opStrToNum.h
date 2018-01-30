@@ -1,3 +1,6 @@
+#ifndef _OPSTR_H_
+#define _OPSTR_H_
+
 /* opStrToNum.h 
  * 
  * Prototypes for opcode conversion. 
@@ -10,3 +13,4 @@
  */
 int opStrToNum(char* opStr);
 
+#endif

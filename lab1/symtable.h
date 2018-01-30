@@ -1,4 +1,8 @@
+#ifndef _SYMTABLE_H_
+#define _SYMTABLE_H_
+
 #include <stdlib.h>
+#include "parse.h"
 
 // psuedo-ops
 #define ORIG ".orig"
@@ -11,8 +15,7 @@
 
 void initSymTableBldr(void);
 
-void buildSymTable(char * label, char * opcode, char * arg1,
-		char * arg2, char * arg3, char * arg4);
+void buildSymTable(iline_t parsedInstr);
 
 /**
  * returns LABEL's addr if its in the table,
@@ -22,3 +25,5 @@ int symbolAddr(char * label);
 
 
 int getNumInstrs(void);
+
+#endif

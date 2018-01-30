@@ -62,30 +62,29 @@ void addLabelToSymTable(char * label) {
 	symTableBldr.symTable[symTableBldr.numSymbols++] = labelEntry;
 }
 
-void buildSymTable(char* label, char * opcode, char * arg1,
-		char * arg2, char * arg3, char * arg4) {
-	if(strlen(label)) {
+void buildSymTable(iline_t parsedInstr) {
+	if(strlen(parsedInstr.label)) {
 		// check label validity, enforcing no label on .orig or .end
-		if(!isValidLabel(label)
-				|| !strcmp(opcode, ORIG)
-				|| !strcmp(opcode, END))
+		if(!isValidLabel(parsedInstr.label)
+				|| !strcmp(parsedInstr.op, ORIG)
+				|| !strcmp(parsedInstr.op, END))
 			error(OTHER);
 
-		addLabelToSymTable(label);
+		addLabelToSymTable(parsedInstr.label);
 	}
 
 	// handle .end
-	if (!strcmp(opcode, END)) {
+	if (!strcmp(parsedInstr.op, END)) {
 		symTableBldr.finishAddr = symTableBldr.currAddr - ADDRESSABILITY;
 		symTableBldr.currAddr = INIT_ADDR;
 	}
 	// handle .orig
-	else if (!strcmp(opcode, ORIG)) {
+	else if (!strcmp(parsedInstr.op, ORIG)) {
 		if(symTableBldr.startAddr != INIT_ADDR // enforce .orig is first opcode 
 				|| symTableBldr.currAddr != INIT_ADDR
 				|| symTableBldr.finishAddr != INIT_ADDR) error(OTHER);
 
-		symTableBldr.startAddr = toNum(arg1);
+		symTableBldr.startAddr = toNum(parsedInstr.arg1);
 		if(!isValidAddr(symTableBldr.startAddr)) error(OTHER);
 		symTableBldr.currAddr = symTableBldr.startAddr;
 	} 

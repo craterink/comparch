@@ -4,53 +4,32 @@
  *
  * By Cooper Raterink and Garret Blevins
  */
-
 #include <stdio.h>
 #include "error.h"
 #include "parse.h"
 #include "num.h"
 #include "symtable.h"
 #include "opStrToNum.h"
+#include "assemble.h"
 
 FILE* infile  = NULL;
 FILE* outfile = NULL;
 int numLines  = 0;
 
-void assess(char* label, char* opcode, char* arg1, char* arg2, char* arg3, 
-            char* arg4){
+void assess(iline_t parsedInstr){
   numLines++;
 }
 
-void assembleInstr(char* label, char* opStr, char* arg1Str, char* arg2Str,
-                   char* arg3Str, char* arg4Str){
-  int opNum = opStrToNum(opStr);
-  
-  /* Handle registers, immediates, and/or offsets. */
-       if((opNum == 1 && sr2) || (opNum == 5 && sr2) || (opNum == 9 && sr2)){
-
-  }
-  else if((opNum == 1 && imm5) || (opNum == 5 && imm5) || (opNum == 9 && imm5)){
-
-  }
-  else if(opNum == 0){
-    
-  }
-  else if(opNum == 4){
-    
-  }
-  else if(){
-    
-  }
-}
-
-void doForEachLine(FILE* inFile, void (*func)(char*, char*, char*, char*, 
-                   char*, char*)){
-  char lLine[MAX_LINE_LENGTH + 1], *lLabel, *lOpcode, *lArg1, *lArg2, *lArg3, *lArg4;
-  int lRet;
+void doForEachLine(FILE* inFile, void (*func)(iline_t)){
+  	char * lLine;
+	iline_t parsedInstr;
+	int lRet;
   do {
-    lRet = readAndParse(inFile, lLine, &lLabel, &lOpcode, &lArg1, &lArg2, &lArg3, &lArg4);
+    lRet = readAndParse(inFile, lLine, (char **)&parsedInstr.label,
+			(char **)&parsedInstr.op, (char **)&parsedInstr.arg1, (char **)&parsedInstr.arg2,
+			(char **)&parsedInstr.arg3, (char **)&parsedInstr.arg4);
     if(lRet != DONE && lRet != EMPTY_LINE){
-      func(lLabel, lOpcode, lArg1, lArg2, lArg3, lArg4);
+      func(parsedInstr);
     }
   } while(lRet != DONE);
 }

@@ -62,7 +62,7 @@ int checkRegexMatch(char* regexStr, char* str){
 
 int isValidLabel(char * str) {
 	return checkRegexMatch(VALID_LABEL_REGEX, str)
-		&& !checkRegexMatch(REGISTER_REGEX, str);	
+		&& !isRegisterStr(str);
 }
 
 int isOpcode(char* str){
@@ -73,3 +73,6 @@ int isValidAddr(int addr){
   return (addr >= 0 && addr <= MAX_ADDR);
 }
 
+int isRegisterStr(char * str) {
+	return checkRegexMatch(REGISTER_REGEX, str);
+}

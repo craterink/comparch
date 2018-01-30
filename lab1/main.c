@@ -11,14 +11,10 @@
 #include "symtable.h"
 #include "opStrToNum.h"
 #include "assemble.h"
+#include "error.h"
 
 FILE* infile  = NULL;
 FILE* outfile = NULL;
-int numLines  = 0;
-
-void assess(iline_t parsedInstr){
-	numLines++;
-}
 
 void doForEachLine(FILE* inFile, void (*func)(iline_t)){
 	char lLine[MAX_LINE_LENGTH + 1];
@@ -35,16 +31,14 @@ void doForEachLine(FILE* inFile, void (*func)(iline_t)){
 }
 
 void printOut(FILE* outFile, int* instrs, int numInstrs){
-	while(numInstrs-- > 0) {
-		fprintf( outFile, "0x%.4X\n", *instrs);
-		instrs++;
-	}
+	while(numInstrs-- > 0)
+		fprintf( outFile, "0x%.4X\n", *(instrs++);
 }
 
 void parseArgs(int argc, char* argv[]){
 	if (argc != 3){
 		printf("invalid args. example: './prog <in.asm> <out.obj>'\n");
-		exit(4);
+		error(OTHER);
 	}
 
 	char *prgName = NULL;
@@ -60,11 +54,11 @@ void parseArgs(int argc, char* argv[]){
 
 	if (!infile){
 		printf("Error: Cannot open file %s\n", argv[1]);
-		exit(4);
+		error(OTHER);
 	}
 	if (!outfile){
 		printf("Error: Cannot open file %s\n", argv[2]);
-		exit(4);
+		error(OTHER);
 	}
 }
 
@@ -74,12 +68,11 @@ int main(int argc, char* argv[]){
 	/* Pass 1 */
 	initSymTableBldr(); /* Build symbol table and count the number of lines. */
 	doForEachLine(infile, buildSymTable);
-	int* instrs = malloc(sizeof(int) * numLines);
 
 	/* Pass 2 */
-	rewind(infile); /* Rewind the cursor to the beginning of the input file. */
+	rewind(infile); /* Rewind the cursor to the beginning of the input file.*/
 	doForEachLine(infile, assembleInstr);
-	printOut(outfile, instrs, numLines);
+	printOut(outfile, (int *)assembledInstrs, currInstr);
 
 	fclose(infile);
 	fclose(outfile);

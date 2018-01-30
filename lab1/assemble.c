@@ -120,12 +120,16 @@ int performAssemble(instr_t * instr, iline_t parsedInstr) {
 			instr->immNumBitsArg3, instr->imm3Type, parsedInstr.arg3);
 }
 
-
+int assembledInstrs[MAX_NUM_INSTRS];
+int currInstr = 0;
 void assembleInstr(iline_t parsedInstr){
+	if(currInstr >= MAX_NUM_INSTRS) error(OTHER);
+
 	// for each line, go through instrs[] and find matching instr, 
 	// then convert using summing procedure
 	instr_t* assocInstr = matchInstr(parsedInstr);
 	if(!assocInstr) error(INVALID_OPCODES);
-	int instrVal = performAssemble(assocInstr, parsedInstr);
-	
+	assembledInstrs[currInstr] = performAssemble(assocInstr, parsedInstr);
+
+	currInstr++;
 }

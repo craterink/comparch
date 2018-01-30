@@ -10,8 +10,9 @@
 #define END ".end"
 
 // as given by lab doc
+#define MAX_NUM_INSTRS 255
 #define LABEL_MAX_STR_LEN 21
-#define MAX_NUM_LABELS 255
+#define MAX_NUM_LABELS MAX_NUM_LINES
 
 void initSymTableBldr(void);
 

@@ -76,3 +76,4 @@ int isValidAddr(int addr){
 int isRegisterStr(char * str) {
 	return checkRegexMatch(REGISTER_REGEX, str);
 }
+

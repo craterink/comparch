@@ -47,7 +47,7 @@ int symbolAddr(char * label) {
 	return -1;
 }
 
-int labelToOffset(char * label, int fromAddr) {
+int labelToOffset(char* label, int fromAddr) {
 	if(isSymbolInTable(label)) {
 		int toAddr = symbolAddr(label);
 		return toAddr - fromAddr; 

@@ -7,7 +7,7 @@
 // psuedo-ops
 #define ORIG ".orig"
 #define FILL ".fill"
-#define END ".end"
+#define END  ".end"
 
 // as given by lab doc
 #define MAX_NUM_INSTRS 255
@@ -29,3 +29,4 @@ int labelToOffset(char * label, int fromAddr) {
 int getNumInstrs(void);
 
 #endif
+

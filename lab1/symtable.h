@@ -23,6 +23,7 @@ void buildSymTable(iline_t parsedInstr);
  */
 int symbolAddr(char * label);
 
+int labelToOffset(char * label, int fromAddr) {
 
 int getNumInstrs(void);
 

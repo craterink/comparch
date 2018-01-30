@@ -11,6 +11,6 @@
  * Input:  opcode string.
  * Output: opcode number.
  */
-int opStrToNum(char* opStr);
+int opStrToNum(char* opStr, char* arg3);
 
 #endif

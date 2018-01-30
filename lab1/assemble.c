@@ -111,7 +111,7 @@ int argVal(arg_parse_fn_t convert, int immBits, int immType, char * arg) {
 }
 
 int performAssemble(instr_t * instr, iline_t parsedInstr) {
-	int instrVal = opStrToNum(parsedInstr.op);
+	int instrVal = opStrToNum(parsedInstr.op, parsedInstr.arg3);
 	instrVal += argVal(instr->arg1Convert, 
 			instr->immNumBitsArg1, instr->imm1Type, parsedInstr.arg1);
 	instrVal += argVal(instr->arg2Convert,

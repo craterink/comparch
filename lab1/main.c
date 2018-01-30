@@ -23,7 +23,7 @@ void assess(char* label, char* opcode, char* arg1, char* arg2, char* arg3,
 
 void assembleInstr(char* label, char* opStr, char* arg1Str, char* arg2Str,
                    char* arg3Str, char* arg4Str){
-  int opNum = opStrToNum(opStr);
+  int opNum = opStrToNum(opStr, arg3Str);
   
   /* Handle registers, immediates, and/or offsets. */
        if((opNum == 1 && sr2) || (opNum == 5 && sr2) || (opNum == 9 && sr2)){

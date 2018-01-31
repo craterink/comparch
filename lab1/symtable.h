@@ -12,7 +12,7 @@
 // as given by lab doc
 #define MAX_NUM_INSTRS 255
 #define LABEL_MAX_STR_LEN 21
-#define MAX_NUM_LABELS MAX_NUM_LINES
+#define MAX_NUM_LABELS MAX_NUM_INSTRS
 
 void initSymTableBldr(void);
 
@@ -24,7 +24,7 @@ void buildSymTable(iline_t parsedInstr);
  */
 int symbolAddr(char * label);
 
-int labelToOffset(char * label, int fromAddr) {
+int labelToOffset(char * label, int fromAddr);
 
 int getNumInstrs(void);
 

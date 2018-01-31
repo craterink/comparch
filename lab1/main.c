@@ -31,8 +31,7 @@ void doForEachLine(FILE* inFile, void (*func)(iline_t)){
 }
 
 void printOut(FILE* outFile, int* instrs, int numInstrs){
-	while(numInstrs-- > 0)
-		fprintf( outFile, "0x%.4X\n", *(instrs++);
+  while(numInstrs-- > 0) fprintf(outFile, "0x%.4X\n", *(instrs++));
 }
 
 void parseArgs(int argc, char* argv[]){
@@ -72,7 +71,7 @@ int main(int argc, char* argv[]){
 	/* Pass 2 */
 	rewind(infile); /* Rewind the cursor to the beginning of the input file.*/
 	doForEachLine(infile, assembleInstr);
-	printOut(outfile, (int *)assembledInstrs, currInstr);
+	/*printOut(outfile, (int *)assembledInstrs, currInstr);*/ /* Removed because currIn                                                                     str is undefined. */
 
 	fclose(infile);
 	fclose(outfile);

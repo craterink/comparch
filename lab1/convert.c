@@ -32,17 +32,24 @@ int regLow(char* arg){
 }
 
 /* Check if an immediate value argument is valid.
- * Input: value and number of bits allowed to use for immediate value.
- * Output: true or false,
+ * Input: value, number of bits allowed to use for immediate value, and if the immediate
+ *        value can be negative.
+ * Output: true or false.
  */
-int inBounds(int num, int numBits){
-  // (num < (2 ** (numBits - 1))) && (num > -(2 ** (numBits - 1)));
-  if((num < (2 ^ (numBits - 1))) && (num > -(2 ^ (numBits - 1)))) return 1;
-  else                                                            return 0;
+int inBounds(int num, int numBits, int isNegAllowed){
+  // (num < (2 ^ (numBits - 1))) && (num > -(2 ^ (numBits - 1)));
+  if(isNegAllowed == 1){
+    if((num < (2 ^ (numBits - 1))) && (num > -(2 ^ (numBits - 1)))) return 1;
+    else                                                            return 0;
+  }
+  else {
+    if((num < (2 ^ (numBits - 1))) && (num >= 0))                   return 1;
+    else                                                            return 0;
+  }
 }
 
 int immN(char* arg, int numBits, int immType){
-  if(inBounds(toNum(arg), numBits)){
+  if(inBounds(toNum(arg), numBits, 1)){ /* THE 1 IS JUST ADDED FOR COMPILATION. */
     return toNum(arg);
   }
 }

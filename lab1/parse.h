@@ -24,12 +24,13 @@ typedef struct iline {
 int readAndParse(FILE* pInfile, char* pLine, char** pLabel, char** pOpcode, 
                  char** pArg1, char** pArg2, char** pArg3, char** pArg4);
 
-int isOpcode(char * str);
+int isOpcode(char* str);
 
-int isValidLabel(char * str);
+int isValidLabel(char* str);
 
 int isiValidAddr(int addr);
 
-int isRegisterStr(char * str);
+int isRegisterStr(char* str);
 
 #endif
+

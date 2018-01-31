@@ -10,7 +10,7 @@ TURNIN_OUTDIR = turnin
 REMOVE_INCLUDE_LINES = sed "/^#include/ d"
 
 build: $(FILES)
-	$(CC) -o $(OUT_EXE) $(FILES)
+	$(CC) -ansi -o $(OUT_EXE) $(FILES)
 
 build_debug: $(FILES)
 	$(CC) -g -o $(DEBUG_EXE) $(FILES)

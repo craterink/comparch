@@ -37,7 +37,7 @@ int regLow(char* arg){
  * Output: true or false.
  */
 int inBounds(int num, int numBits, int isNegAllowed){
-  // (num < (2 ^ (numBits - 1))) && (num > -(2 ^ (numBits - 1)));
+  /* (num < (2 ^ (numBits - 1))) && (num > -(2 ^ (numBits - 1))); */
   if(isNegAllowed == 1){
     if((num < (2 ^ (numBits - 1))) && (num > -(2 ^ (numBits - 1)))) return 1;
     else                                                            return 0;

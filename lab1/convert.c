@@ -1,6 +1,7 @@
 #include "convert.h"
 #include "parse.h"
 #include "error.h"
+#include "assemble.h"
 #include <stdlib.h>
 
 #define HIGH_REG_SHIFT 9
@@ -48,8 +49,11 @@ int inBounds(int num, int numBits, int isNegAllowed){
 }
 
 int immN(char* arg, int numBits, int immType){
-  if(inBounds(toNum(arg), numBits, immType)){ 
-    return toNum(arg);
-  }
+	int isNegAllowed = (immType == isNegAllowed);
+	if(inBounds(toNum(arg), numBits, isNegAllowed)){
+		int argNum = toNum(arg);
+		if(numBits == BOFFSET6) return argNum*2;
+		else return argNum;
+	}
 }
 

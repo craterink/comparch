@@ -1,4 +1,5 @@
 CC = gcc
+CC_ARGS = -ansi -o
 IN = in.txt
 OUT = out.txt
 IO_FILES = $(IN) $(OUT)
@@ -10,7 +11,7 @@ TURNIN_OUTDIR = turnin
 REMOVE_INCLUDE_LINES = sed "/^#include/ d"
 
 build: $(FILES)
-	$(CC) -ansi -o $(OUT_EXE) $(FILES)
+	$(CC) $(CC_ARGS) $(OUT_EXE) $(FILES)
 
 build_debug: $(FILES)
 	$(CC) -g -o $(DEBUG_EXE) $(FILES)

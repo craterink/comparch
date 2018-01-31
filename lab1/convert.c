@@ -7,6 +7,8 @@
 #define MID_REG_SHIFT  6
 #define LOW_REG_SHIFT  0
 
+#define HIGHEST_REG 7
+
 /* Check if a register argument is valid and if so convert it to instruction bits.
  * Input: register argument string "rx", and the amount to shift the bits for instruction. 
  * Output: error code or register instruction bits.
@@ -15,7 +17,7 @@ int regConvert(char* arg, int leftShift){
   if(isRegisterStr(arg) != 1) return OTHER;
   arg++;
   int reg = atoi(arg);
-  if(reg <= 7 && reg >= 0)    return reg << leftShift;
+  if(reg <= HIGHEST_REG && reg >= 0)    return reg << leftShift;
   else                        return OTHER;
 }
 
@@ -37,19 +39,16 @@ int regLow(char* arg){
  * Output: true or false.
  */
 int inBounds(int num, int numBits, int isNegAllowed){
-  /* (num < (2 ^ (numBits - 1))) && (num > -(2 ^ (numBits - 1))); */
-  if(isNegAllowed == 1){
-    if((num < (2 ^ (numBits - 1))) && (num > -(2 ^ (numBits - 1)))) return 1;
-    else                                                            return 0;
+  if(isNegAllowed == NEG_ALLOWED){
+    return (num < (2 ^ (numBits - 1) - 1)) && (num > -(2 ^ (numBits - 1)));
   }
   else {
-    if((num < (2 ^ (numBits - 1))) && (num >= 0))                   return 1;
-    else                                                            return 0;
+    return (num < (2 ^ (numBits - 1) - 1)) && (num >= 0);
   }
 }
 
 int immN(char* arg, int numBits, int immType){
-  if(inBounds(toNum(arg), numBits, 1)){ /* THE 1 IS JUST ADDED FOR COMPILATION. */
+  if(inBounds(toNum(arg), numBits, immType)){ 
     return toNum(arg);
   }
 }

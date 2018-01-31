@@ -46,10 +46,11 @@ int symbolAddr(char* label){
   return -1;
 }
 
+/* returns byte offset / ADDRESSIBILTY (instruction offset) */
 int labelToOffset(char* label, int fromAddr){
   if(isSymbolInTable(label)){
     int toAddr = symbolAddr(label);
-    return toAddr - fromAddr; 
+    return (toAddr - fromAddr) / ADDRESSABILITY; 
   } 
   else { error(UNDEFINED_LABELS); }
 }

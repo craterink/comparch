@@ -1,7 +1,7 @@
 CC = gcc
 CC_ARGS = -ansi -o
-IN = in.txt
-OUT = out.txt
+IN = in.asm
+OUT = out.obj
 IO_FILES = $(IN) $(OUT)
 FILES = *.c *.h
 OUT_EXE = lab1

@@ -235,7 +235,21 @@ instr_t instrs[NUM_INSTR_VARIATIONS] = {
     regHigh, REGARG, NOCONST,
     regMed,  REGARG, NOCONST,
     NULL, IMM5, NEG_ALLOWED
-  }
+  },
+  { /* .ORIG */
+    "TRAP",
+    NULL,
+    NULL, AMOUNT16, POS_ONLY,
+    NULL, NOARG, NOCONST,
+    NULL, NOARG, NOCONST
+  },
+  { /* .ORIG */
+    ".ORIG",
+    NULL,
+    NULL, AMOUNT16, POS_ONLY,
+    NULL, NOARG, NOCONST,
+    NULL, NOARG, NOCONST
+  },
 };
 
 int isOpcodeMatch(instr_t instr, char* op){

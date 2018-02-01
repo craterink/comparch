@@ -4,6 +4,7 @@
 #define OPCODE_REGEX "^(ADD|AND|BR|BRN|BRZ|BRP|BRNP|BRZP|BRNZ|BRNZP|HALT|JMP|JSR|JSRR|LDB|LDW|LEA|NOP|NOT|RET|LSHF|RSHFL|RSHFA|RTI|STB|STW|TRAP|XOR)$"
 #define VALID_LABEL_REGEX "^[a-wyz0-9][a-z0-9]{0,19}$"
 #define REGISTER_REGEX "^r[0-7]$"
+#define END_REGEX "^\\.END$"
 
 int readAndParse(FILE* pInfile, char* pLine, char** pLabel, char** pOpcode, 
                  char** pArg1, char** pArg2, char** pArg3, char** pArg4){
@@ -75,5 +76,9 @@ int isValidAddr(int addr){
 
 int isRegisterStr(char * str) {
 	return checkRegexMatch(REGISTER_REGEX, str);
+}
+
+int isEnd(char * str) {
+	return checkRegexMatch(END_REGEX, str);
 }
 

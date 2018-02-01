@@ -12,7 +12,7 @@ clean:
 	rm -f $(OUT_EXE) $(DEBUG_EXE)
 
 go: build
-	./$(OUT_EXE)
+	./$(OUT_EXE) $(IO_FILES)
 
 debug: build_debug
 	gdb --args ./$(DEBUG_EXE) $(IO_FILES)

@@ -17,7 +17,8 @@
 #define PCOFFS11 	     11
 #define AMOUNT16             16
 
-extern int assembledInstr[MAX_NUM_INSTRS]; 
+extern int assembledInstrs[MAX_NUM_INSTRS]; 
+extern int currInstr;
 
 void assembleInstr(iline_t parsedInstr);
 

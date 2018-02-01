@@ -77,7 +77,8 @@ int main(int argc, char* argv[]){
   /* Pass 2 */
   rewind(infile); /* Rewind the cursor to the beginning of the input file.*/
   doForEachLine(infile, assembleInstr);
-  /*printOut(outfile, (int *)assembledInstrs, currInstr);*/ /* Removed because currIn                                                                     str is undefined. */
+  
+  printOut(outfile, (int *)assembledInstrs, currInstr);
 
   fclose(infile);
   fclose(outfile);

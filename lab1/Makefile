@@ -1,6 +1,6 @@
 include ../Makefile
 
-IN = in.asm
+IN = ex2.asm
 OUT = out.obj
 IO_FILES = $(IN) $(OUT)
 OUT_EXE = lab1

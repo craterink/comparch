@@ -281,7 +281,10 @@ int argVal(arg_parse_fn_t convert, int immBits, int immType, char* arg){
 	else {
 		if(immBits == NOARG){ /* do nothing */ }
 		else if (immBits == REGARG) { error(OTHER); }
-		else { return immN(arg, immBits, immType, currAddr); }
+		else {
+			int pcLoc = currAddr + ADDRESSABILITY;
+			return immN(arg, immBits, immType, pcLoc); 
+		}
 	}
 }
 
@@ -293,13 +296,17 @@ int performAssemble(instr_t* instr, iline_t parsedInstr) {
 			parsedInstr.arg2);
 	instrVal += argVal(instr->arg3Convert, instr->immNumBitsArg3, instr->imm3Type,
 			parsedInstr.arg3);
+	return instrVal;
 }
 
 void assembleInstr(iline_t parsedInstr)
 {
 	if(isEnd(parsedInstr.op)) return;
+	
+	int instrVal = 0;
 	if(isOrig(parsedInstr.op)) {
-		currAddr = immN(parsedInstr.arg1, AMOUNT16, POS_ONLY, currAddr);
+		currAddr = immN(parsedInstr.arg1, AMOUNT16, POS_ONLY, 0);
+		instrVal = currAddr;
 	} 
 	else {
 		if(currInstr >= MAX_NUM_INSTRS) error(OTHER);
@@ -307,9 +314,9 @@ void assembleInstr(iline_t parsedInstr)
 		/* then convert using summing procedure */
 		instr_t* assocInstr = matchInstr(parsedInstr);
 		if(!assocInstr) error(INVALID_OPCODES);
-		assembledInstrs[currInstr] = performAssemble(assocInstr, parsedInstr);
-		currInstr++;
+		instrVal = performAssemble(assocInstr, parsedInstr);
 		currAddr+=ADDRESSABILITY;
 	}
+	assembledInstrs[currInstr++] = instrVal;
 }
 

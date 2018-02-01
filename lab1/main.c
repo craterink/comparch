@@ -6,6 +6,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include "error.h"
 #include "parse.h"
 #include "num.h"
@@ -18,15 +19,15 @@ FILE* infile  = NULL;
 FILE* outfile = NULL;
 
 void doForEachLine(FILE* inFile, void (*func)(iline_t)){
-  char lLine[MAX_LINE_LENGTH + 1];
+ char lLine[MAX_LINE_LENGTH + 1], *lLabel, *lOpcode, *lArg1,
+	                   *lArg2, *lArg3, *lArg4;
   iline_t parsedInstr;
   int lRet;
   do {
-    lRet = readAndParse(inFile, lLine, (char**)&parsedInstr.label,
-			(char**)&parsedInstr.op, (char**)&parsedInstr.arg1,
-                        (char**)&parsedInstr.arg2, (char**)&parsedInstr.arg3,
-                        (char**)&parsedInstr.arg4);
-    if(lRet != DONE && lRet != EMPTY_LINE){ func(parsedInstr); }
+	lRet = readAndParse( inFile, lLine, &lLabel,
+		                                &lOpcode, &lArg1, &lArg2, &lArg3, &lArg4 );
+    strncpy(parsedInstr.op, lOpcode, MAX_LINE_LENGTH + 1);
+	if(lRet != DONE && lRet != EMPTY_LINE){ func(parsedInstr); }
   } while(lRet != DONE);
 }
 

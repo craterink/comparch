@@ -26,7 +26,12 @@ void doForEachLine(FILE* inFile, void (*func)(iline_t)){
   do {
 	lRet = readAndParse( inFile, lLine, &lLabel,
 		                                &lOpcode, &lArg1, &lArg2, &lArg3, &lArg4 );
+    strncpy(parsedInstr.label, lLabel, MAX_LINE_LENGTH + 1);
     strncpy(parsedInstr.op, lOpcode, MAX_LINE_LENGTH + 1);
+    strncpy(parsedInstr.arg1, lArg1, MAX_LINE_LENGTH + 1);
+    strncpy(parsedInstr.arg2, lArg2, MAX_LINE_LENGTH + 1);
+    strncpy(parsedInstr.arg3, lArg3, MAX_LINE_LENGTH + 1);
+    strncpy(parsedInstr.arg4, lArg4, MAX_LINE_LENGTH + 1);
 	if(lRet != DONE && lRet != EMPTY_LINE){ func(parsedInstr); }
   } while(lRet != DONE);
 }

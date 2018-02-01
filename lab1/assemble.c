@@ -1,7 +1,11 @@
+#include <string.h>
 #include "assemble.h"
 #include "convert.h"
 #include "error.h"
 #include "opStrToNum.h"
+#include "parse.h"
+
+#define END_PSOP ".END"
 
 typedef int (*arg_parse_fn_t)(char*);
 typedef int (*dupl_instr_fn_t)(iline_t parsedInstr);
@@ -295,7 +299,9 @@ int performAssemble(instr_t* instr, iline_t parsedInstr) {
 
 int assembledInstrs[MAX_NUM_INSTRS];
 int currInstr = 0;
-void assembleInstr(iline_t parsedInstr){
+void assembleInstr(iline_t parsedInstr)
+{
+  if(isEnd(parsedInstr.op)) return;
   if(currInstr >= MAX_NUM_INSTRS) error(OTHER);
   /* for each line, go through instrs[] and find matching instr, */
   /* then convert using summing procedure */

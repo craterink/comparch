@@ -32,5 +32,7 @@ int isiValidAddr(int addr);
 
 int isRegisterStr(char* str);
 
+int isEnd(char* str);
+
 #endif
 

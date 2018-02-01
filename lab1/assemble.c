@@ -7,7 +7,6 @@
 
 #define END_PSOP ".END"
 
-
 typedef int (*arg_parse_fn_t)(char*);
 typedef int (*dupl_instr_fn_t)(iline_t parsedInstr);
 

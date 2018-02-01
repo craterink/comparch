@@ -13,6 +13,7 @@
 #define MAX_NUM_INSTRS 255
 #define LABEL_MAX_STR_LEN 21
 #define MAX_NUM_LABELS MAX_NUM_INSTRS
+#define ADDRESSABILITY  2
 
 void initSymTableBldr(void);
 
@@ -23,6 +24,8 @@ void buildSymTable(iline_t parsedInstr);
  *  or -1 if not.
  */
 int symbolAddr(char* label);
+
+int isSymbolInTable(char * label);
 
 int labelToOffset(char* label, int fromAddr);
 

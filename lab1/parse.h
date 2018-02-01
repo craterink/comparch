@@ -34,5 +34,7 @@ int isRegisterStr(char* str);
 
 int isEnd(char* str);
 
+int isOrig(char* str);
+
 #endif
 

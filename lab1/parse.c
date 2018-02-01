@@ -5,6 +5,7 @@
 #define VALID_LABEL_REGEX "^[a-wyz0-9][a-z0-9]{0,19}$"
 #define REGISTER_REGEX "^r[0-7]$"
 #define END_REGEX "^\\.END$"
+#define ORIG_REGEX "^\\.ORIG$"
 
 int readAndParse(FILE* pInfile, char* pLine, char** pLabel, char** pOpcode, 
                  char** pArg1, char** pArg2, char** pArg3, char** pArg4){
@@ -82,3 +83,6 @@ int isEnd(char * str) {
 	return checkRegexMatch(END_REGEX, str);
 }
 
+int isOrig(char * str) {
+	return checkRegexMatch(ORIG_REGEX, str);
+}

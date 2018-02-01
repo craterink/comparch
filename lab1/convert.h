@@ -6,5 +6,5 @@ int regHigh(char* arg);
 int regMed(char* arg);
 int regLow(char* arg);
 
-int immN(char* arg, int numBits, int immType);
+int immN(char* arg, int numBits, int immType, int currAddr);
 

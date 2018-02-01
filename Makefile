@@ -1,12 +1,12 @@
 CC = gcc
-CC_ARGS = -ansi -o
+CC_ARGS = -lm -ansi -o
 FILES = *.c *.h
 
 build: $(FILES)
 	$(CC) $(CC_ARGS) $(OUT_EXE) $(FILES)
 
 build_debug: $(FILES)
-	$(CC) -g -o $(DEBUG_EXE) $(FILES)
+	$(CC) -g $(CC_ARGS) $(DEBUG_EXE) $(FILES)
 
 clean:
 	rm -f $(OUT_EXE) $(DEBUG_EXE)

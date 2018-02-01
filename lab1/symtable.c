@@ -4,7 +4,6 @@
 #include "error.h"
 
 #define INIT_ADDR      -1
-#define ADDRESSABILITY  2
 
 typedef char label_t[LABEL_MAX_STR_LEN];
 typedef struct sym_table_entry {
@@ -46,7 +45,7 @@ int symbolAddr(char* label){
   return -1;
 }
 
-/* returns byte offset / ADDRESSIBILTY (instruction offset) */
+/* returns byte offset / ADDRESSABILTY (instruction offset) */
 int labelToOffset(char* label, int fromAddr){
   if(isSymbolInTable(label)){
     int toAddr = symbolAddr(label);

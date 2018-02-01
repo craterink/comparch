@@ -75,9 +75,9 @@ int opStrToNum(char* opStr, char* arg3){
     if(arg3[0] == 'r') opNum = 36864;
     else               opNum = 36896;
   }
-  else if(strcmp(opStr, fillStr) == 0) opNum = 16;
-  else if(strcmp(opStr, origStr) == 0) opNum = 17;
-  else if(strcmp(opStr, endStr)  == 0) opNum = 18;
+  else if(strcmp(opStr, fillStr) == 0) opNum = 0;
+  else if(strcmp(opStr, origStr) == 0) opNum = 0;
+  else if(strcmp(opStr, endStr)  == 0) opNum = 0;
 
   return opNum; 
 }

@@ -147,7 +147,7 @@ instr_t instrs[NUM_INSTR_VARIATIONS] = {
 		NULL,
 		regHigh, REGARG, NOCONST,
 		regMed,  REGARG, NOCONST,
-		NULL, BOFFSET6, NEG_ALLOWED
+		NULL, BOFFSET6, BYTE_OFFSET
 	},
 	{ /* LDW */
 		"LDW",
@@ -210,7 +210,7 @@ instr_t instrs[NUM_INSTR_VARIATIONS] = {
 		NULL,
 		regHigh, REGARG, NOCONST,
 		regMed,  REGARG, NOCONST,
-		NULL, BOFFSET6, NEG_ALLOWED
+		NULL, BOFFSET6, BYTE_OFFSET
 	},
 	{ /* STW */
 		"STW",

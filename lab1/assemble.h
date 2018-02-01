@@ -11,7 +11,7 @@
 #define AMOUNT4 	     4
 #define IMM5 		     5
 #define OFFSET6 	     6
-#define BOFFSET6	     7
+#define BOFFSET6	     6
 #define TRAPVEC8 	     8
 #define PCOFFS9 	     9
 #define PCOFFS11 	     11

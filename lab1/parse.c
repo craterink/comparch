@@ -2,10 +2,12 @@
 #include <regex.h>
 
 #define OPCODE_REGEX "^(ADD|AND|BR|BRN|BRZ|BRP|BRNP|BRZP|BRNZ|BRNZP|HALT|JMP|JSR|JSRR|LDB|LDW|LEA|NOP|NOT|RET|LSHF|RSHFL|RSHFA|RTI|STB|STW|TRAP|XOR)$"
+#define PSOP_REGEX "^(\\.END|\\.FILL|\\.ORIG|PUTS|GETC|IN|OUT)$"
 #define VALID_LABEL_REGEX "^[a-wyz0-9][a-z0-9]{0,19}$"
 #define REGISTER_REGEX "^r[0-7]$"
 #define END_REGEX "^\\.END$"
 #define ORIG_REGEX "^\\.ORIG$"
+#define IMM_REGEX "^(x-?[0-9a-f]{0,255}|#-?[0-9]{0,255})$"
 
 int readAndParse(FILE* pInfile, char* pLine, char** pLabel, char** pOpcode, 
                  char** pArg1, char** pArg2, char** pArg3, char** pArg4){
@@ -64,11 +66,15 @@ int checkRegexMatch(char* regexStr, char* str){
 
 int isValidLabel(char * str) {
 	return checkRegexMatch(VALID_LABEL_REGEX, str)
-		&& !isRegisterStr(str);
+		&& !isRegisterStr(str) && isOpcode(str) == -1 && !isPsop(str);
 }
 
 int isOpcode(char* str){
   return checkRegexMatch(OPCODE_REGEX, str) ? 0 : -1;
+}
+
+int isPsop(char* str){
+  return checkRegexMatch(PSOP_REGEX, str);
 }
 
 int isValidAddr(int addr){
@@ -85,4 +91,8 @@ int isEnd(char * str) {
 
 int isOrig(char * str) {
 	return checkRegexMatch(ORIG_REGEX, str);
+}
+
+int isImm(char * str) {
+	return checkRegexMatch(IMM_REGEX, str);
 }

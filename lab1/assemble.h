@@ -4,7 +4,7 @@
 #include "parse.h"
 #include "symtable.h"
 
-#define NUM_INSTR_VARIATIONS 30
+#define NUM_INSTR_VARIATIONS 32
 #define MAX_INSTR_STR_LEN    5
 #define REGARG		     0
 #define NOARG	             0

@@ -1,6 +1,5 @@
 CC = gcc
 CC_ARGS = -lm -ansi -o
-FILES = *.c *.h
 
 build: $(FILES)
 	$(CC) $(CC_ARGS) $(OUT_EXE) $(FILES)

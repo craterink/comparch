@@ -30,10 +30,10 @@ typedef struct instr {
 } instr_t;
 
 int isInstrWithImm(iline_t parsedInstr){
-	return isRegisterStr(parsedInstr.arg3);
+	return !isInstrNoImm(parsedInstr);
 }
 int isInstrNoImm(iline_t parsedInstr){
-	return !isInstrWithImm(parsedInstr);
+	return isRegisterStr(parsedInstr.arg3);
 }
 
 instr_t instrs[NUM_INSTR_VARIATIONS] = {
@@ -226,6 +226,13 @@ instr_t instrs[NUM_INSTR_VARIATIONS] = {
 		NULL, NOARG, NOCONST,
 		NULL, NOARG, NOCONST
 	},
+	{ /* HALT */
+		"HALT",
+		NULL,
+		NULL, NOARG, NOCONST,
+		NULL, NOARG, NOCONST,
+		NULL, NOARG, NOCONST
+	},
 	{ /* XOR 3reg */
 		"XOR",
 		isInstrNoImm,
@@ -247,6 +254,13 @@ instr_t instrs[NUM_INSTR_VARIATIONS] = {
 		NULL, NOARG, NOCONST,
 		NULL, NOARG, NOCONST
 	},
+	{ /* NOP */
+		"NOP",
+		NULL,
+		NULL, NOARG, NOCONST,
+		NULL, NOARG, NOCONST,
+		NULL, NOARG, NOCONST
+	}
 };
 
 int assembledInstrs[MAX_NUM_INSTRS];
@@ -279,9 +293,14 @@ int argVal(arg_parse_fn_t convert, int immBits, int immType, char* arg){
 	int val;
 	if(convert){ return convert(arg); } 
 	else {
-		if(immBits == NOARG){ /* do nothing */ }
-		else if (immBits == REGARG) { error(OTHER); }
+		if(immBits == NOARG){ 
+			if(strlen(arg)) error(OTHER);
+		}
+		else if (immBits == REGARG) { 
+			error(OTHER); 
+		}
 		else {
+			if(!strlen(arg)) error(OTHER);
 			int pcLoc = currAddr + ADDRESSABILITY;
 			return immN(arg, immBits, immType, pcLoc); 
 		}
@@ -306,6 +325,8 @@ void assembleInstr(iline_t parsedInstr)
 	int instrVal = 0;
 	if(isOrig(parsedInstr.op)) {
 		currAddr = immN(parsedInstr.arg1, AMOUNT16, POS_ONLY, 0);
+		/* enforce even parity */
+		if((currAddr / 2) != ((currAddr + 1) / 2)) error(INVALID_CONSTANTS);
 		instrVal = currAddr;
 	} 
 	else {

@@ -70,9 +70,8 @@ void addLabelToSymTable(char* label){
 void buildSymTable(iline_t parsedInstr){
   if(strlen(parsedInstr.label)){
   /* check label validity, enforcing no label on .orig or .end */
-  if(!isValidLabel(parsedInstr.label) || !strcmp(parsedInstr.op, ORIG)
-				      || !strcmp(parsedInstr.op, END))
-    error(OTHER);
+  if(!isValidLabel(parsedInstr.label))
+	  error(OTHER);
 
   addLabelToSymTable(parsedInstr.label);
   }

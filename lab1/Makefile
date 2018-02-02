@@ -1,5 +1,6 @@
 include ../Makefile
 
+FILES = *.c *.h
 IN = ex2.asm
 OUT = out.obj
 IO_FILES = $(IN) $(OUT)

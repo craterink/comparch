@@ -36,5 +36,7 @@ int isEnd(char* str);
 
 int isOrig(char* str);
 
+int isImm(char * str);
+
 #endif
 

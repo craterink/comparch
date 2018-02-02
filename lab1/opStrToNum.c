@@ -29,10 +29,12 @@ char rshfaStr[]= "rshfa";
 char stbStr[]  = "stb";
 char stwStr[]  = "stw";
 char trapStr[] = "trap";
+char haltStr[] = "halt";
 char xorStr[]  = "xor";
 char fillStr[] = ".fill";
 char origStr[] = ".orig";
 char endStr[]  = ".end";
+char nopStr[] = "nop";
 
 /* The conversion function. 
  * Input: opcode string.
@@ -49,7 +51,7 @@ int opStrToNum(char* opStr, char* arg3){
     if(arg3[0] == 'r') opNum = 20480;
     else               opNum = 20512;
   }
-  else if(strcmp(opStr, brStr)   == 0 || strcmp(opStr, brnzpStr) == 0) opNum = 0;
+  else if(strcmp(opStr, brStr)   == 0 || strcmp(opStr, brnzpStr) == 0) opNum = 0x0E00;
   else if(strcmp(opStr, brnStr)  == 0) opNum = 2048;
   else if(strcmp(opStr, brzStr)  == 0) opNum = 1024;
   else if(strcmp(opStr, brpStr)  == 0) opNum = 512;
@@ -71,6 +73,8 @@ int opStrToNum(char* opStr, char* arg3){
   else if(strcmp(opStr, stbStr)  == 0) opNum = 12288;
   else if(strcmp(opStr, stwStr)  == 0) opNum = 28672;
   else if(strcmp(opStr, trapStr) == 0) opNum = 61440;
+  else if(strcmp(opStr, haltStr) == 0) opNum = 61440 + 0x25; 
+  else if(strcmp(opStr, nopStr) == 0) opNum = 0; 
   else if(strcmp(opStr, xorStr)  == 0){
     if(arg3[0] == 'r') opNum = 36864;
     else               opNum = 36896;

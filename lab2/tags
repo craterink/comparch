@@ -1,0 +1,38 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+CURRENT_LATCHES	lc3bsim2.c	/^System_Latches CURRENT_LATCHES, NEXT_LATCHES;$/;"	v
+FALSE	lc3bsim2.c	37;"	d	file:
+INSTRUCTION_COUNT	lc3bsim2.c	/^int INSTRUCTION_COUNT;$/;"	v
+LC_3b_REGS	lc3bsim2.c	62;"	d	file:
+Low16bits	lc3bsim2.c	43;"	d	file:
+MEMORY	lc3bsim2.c	/^int MEMORY[WORDS_IN_MEM][2];$/;"	v
+N	lc3bsim2.c	/^    N,		\/* n condition bit *\/$/;"	m	struct:System_Latches_Struct	file:
+NEXT_LATCHES	lc3bsim2.c	/^System_Latches CURRENT_LATCHES, NEXT_LATCHES;$/;"	v
+P	lc3bsim2.c	/^    P;		\/* p condition bit *\/$/;"	m	struct:System_Latches_Struct	file:
+PC	lc3bsim2.c	/^  int PC,		\/* program counter *\/$/;"	m	struct:System_Latches_Struct	file:
+REGS	lc3bsim2.c	/^  int REGS[LC_3b_REGS]; \/* register file. *\/$/;"	m	struct:System_Latches_Struct	file:
+RUN_BIT	lc3bsim2.c	/^int RUN_BIT;	\/* run bit *\/$/;"	v
+SIM_ERROR	lc3bsim2.c	406;"	d	file:
+System_Latches	lc3bsim2.c	/^} System_Latches;$/;"	t	typeref:struct:System_Latches_Struct	file:
+System_Latches_Struct	lc3bsim2.c	/^typedef struct System_Latches_Struct{$/;"	s	file:
+TRUE	lc3bsim2.c	38;"	d	file:
+WORDS_IN_MEM	lc3bsim2.c	52;"	d	file:
+Z	lc3bsim2.c	/^    Z,		\/* z condition bit *\/$/;"	m	struct:System_Latches_Struct	file:
+cycle	lc3bsim2.c	/^void cycle() {                                                $/;"	f
+get_command	lc3bsim2.c	/^void get_command(FILE * dumpsim_file) {                         $/;"	f
+go	lc3bsim2.c	/^void go() {                                                     $/;"	f
+help	lc3bsim2.c	/^void help() {                                                    $/;"	f
+init_memory	lc3bsim2.c	/^void init_memory() {                                           $/;"	f
+initialize	lc3bsim2.c	/^void initialize(char *program_filename, int num_prog_files) { $/;"	f
+loadReg	lc3bsim2.c	/^int loadReg(int regNum) {$/;"	f
+load_program	lc3bsim2.c	/^void load_program(char *program_filename) {                   $/;"	f
+main	lc3bsim2.c	/^int main(int argc, char *argv[]) {                              $/;"	f
+mdump	lc3bsim2.c	/^void mdump(FILE * dumpsim_file, int start, int stop) {          $/;"	f
+process_instruction	lc3bsim2.c	/^void process_instruction(){$/;"	f
+rdump	lc3bsim2.c	/^void rdump(FILE * dumpsim_file) {                               $/;"	f
+run	lc3bsim2.c	/^void run(int num_cycles) {                                      $/;"	f
+storeReg	lc3bsim2.c	/^void storeReg(int regNum, int value) {$/;"	f

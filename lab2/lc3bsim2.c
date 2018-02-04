@@ -514,11 +514,6 @@ void storeWord(int word, int wordVal) {
 	storeMem(word, BIG_END, bigEnd);
 }
 
-
-int and(int val1, int val2) {
-	return val1 & val2;
-}
-
 int xor(int val1, int val2) {
 	return val1 ^ val2;
 }
@@ -527,13 +522,17 @@ int add(int val1, int val2) {
 	return val1 + val2;
 }
 
+int and(int val1, int val2){
+  return val1 & val2;
+}
+
 typedef int (*ALUOP_t)(int, int);
 int ALU(int val1, int val2, ALUOP_t opfn) {
 	return 0;
 }
 
-int fetchInstr() {
-
+int fetchInstruction(){
+  return loadWord(loadReg(PC_REG));
 }
 
 void setCC(int result) {
@@ -606,9 +605,6 @@ int decodeAndExecInstr(int instr) {
 		case LEA:
 
 			break;
-		case RTI:
-
-			break;
 		case SHF:
 
 			break;
@@ -627,7 +623,6 @@ int decodeAndExecInstr(int instr) {
 
 	}
 }
-
 
 void process_instruction(){
   /*  function: process_instruction

@@ -544,6 +544,7 @@ int decodeAndExecInstr(int instr){
       if(ABit(instr) == 0)
            storeReg(regHigh(instr), and(loadReg(regLow(instr)), loadReg(regHigh(instr))));
       else storeReg(regHigh(instr), and(immN(5, instr),         loadReg(regHigh(instr))));
+      setcc();
     case BR:
       break;
     case JMP:
@@ -551,7 +552,8 @@ int decodeAndExecInstr(int instr){
     case JSR:
       break;
     case LDB:
-      break;
+      storeReg(regHigh(instr), loadMem(loadReg(regMid(instr)) + 
+      setcc();
     case LDW:
       break;
     case LEA:

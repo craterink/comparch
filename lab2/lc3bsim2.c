@@ -403,6 +403,9 @@ int main(int argc, char *argv[]) {
 /***************************************************************/
 
 #define Lowbit(x) ((x) & 0x1)
+#define Low8bits(x) ((x) & 0xFF)
+#define LeftShiftOneByte(x) ((x) << 8)
+#define RightShiftOneByte(x) ((x) >> 8)
 
 #define SIM_ERROR 4
 
@@ -413,6 +416,8 @@ int main(int argc, char *argv[]) {
 #define P_CC -4
 
 #define BYTES_PER_MEM_LOC 2
+#define LITTLE_END 0
+#define BIG_END 1
 
 
 int loadReg(int regNum) {
@@ -460,12 +465,26 @@ int loadMem(int loc, int byte) {
 		exit(SIM_ERROR);
 }
 
+int loadWord(int word) {
+	int littleEnd = load(word, LITTLE_END);
+	int bigEnd = load(word, BIG_END);
+	/* assume word has been stored correctly */ 
+	return littleEnd | LeftShiftOneByte(bigEnd);
+}
+
 void storeMem(int loc, int byte, int value) {
 	if(isValidMemAccess(loc,byte)) {
 		MEMORY[loc][byte] = value; /* TODO: mask value according to how mem is stored */
 	}
 	else
 	exit(SIM_ERROR);
+}
+
+void storeWord(int word, int wordVal) {
+	int littleEnd = Low8bits(wordVal);
+	int bigEnd = Low8bits(RightShiftOneByte(wordVal));
+	storeMem(word, LITTLE_END, littleEnd);
+	storeMem(word, BIG_END, bigEnd);
 }
 
 

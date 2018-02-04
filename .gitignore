@@ -5,4 +5,9 @@ lab1/lab1
 turnin
 *.swm
 *.swn
-ex1.obj ex2.obj out.obj
+**/ex1.obj
+**/ex2.obj
+**/out.obj
+**/tags
+lab2/lab2
+lab2/lab2debug

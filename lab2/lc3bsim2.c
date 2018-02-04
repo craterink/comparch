@@ -607,7 +607,7 @@ int decodeAndExecInstr(int instr) {
 		case LDW:
 			DR = RegHigh(instr);
 			BaseR = RegMid(instr);
-			addrOffs = signedImmN(6, instr) << 1;
+			addrOffs = signedImmN(6, instr);
 			loadedVal = loadWord(BaseR + addrOffs);
 			storeReg(DR, loadedVal);
 			setCC(loadedVal);
@@ -641,7 +641,7 @@ int decodeAndExecInstr(int instr) {
 		case STW:
 			SR1 = RegHigh(instr);
 			BaseR = RegMid(instr);
-			addrOffs = signedImmN(6, instr) << 1;
+			addrOffs = signedImmN(6, instr);
 			wordToStore = loadReg(SR1);
 			storeWord(BaseR + addrOffs, wordToStore);
 			break;

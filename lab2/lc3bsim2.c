@@ -439,7 +439,6 @@ int main(int argc, char *argv[]) {
 #define LDB 0x0010
 #define LDW 0x0110
 #define LEA 0x1110
-#define RTI 0x1000
 #define SHF 0x1101
 #define STB 0x0011
 #define STW 0x0111
@@ -594,19 +593,30 @@ int decodeAndExecInstr(int instr) {
 
 			break;
 		case JSR:
-
+			storeReg(7, loadReg(PC));
+			int subrAddr = JSR_ABit(instr) ?
+				loadReg(PC_REG) + (signedImmN(11, instr) << 1) :
+				loadReg(RegMid(instr));
+			storeReg(PC_REG, subrAddr);
 			break;
 		case LDB:
 
 			break;
 		case LDW:
-
+			int DR = RegHigh(instr);
+			int BaseR = RegMid(instr);
+			int addrOffs = signedImmN(6, instr) << 1;
+			int loadedVal = LoadWord(BaserR + addrOffs);
+			storeReg(DR, loadedVal);
+			setCC(loadedVal);
 			break;
 		case LEA:
 
 			break;
 		case SHF:
-
+			int shiftRight = DBit(instr);
+			int amt = ImmN(4, instr);
+			if(shiftRight)
 			break;
 		case STB:
 

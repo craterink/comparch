@@ -514,11 +514,6 @@ void storeWord(int word, int wordVal) {
 	storeMem(word, BIG_END, bigEnd);
 }
 
-
-int and(int val1, int val2) {
-	return val1 & val2;
-}
-
 int xor(int val1, int val2) {
 	return val1 ^ val2;
 }
@@ -540,31 +535,26 @@ int fetchInstruction(){
   return loadWord(loadReg(PC_REG));
 }
 
-int decodeAndExecInstr(int instr) {
-	int opCode = OpcodeOfInstr(instr);
-	switch(opCode) {
-		case ADD:
-			
-			break;
-		case AND:
-
-			break;
-		case BR:
-
-			break;
-		case JMP:
-
-			break;
-		case JSR:
-
-			break;
-		case LDB:
-
-			break;
-		case LDW:
-
-			break;
-		case LEA:
+int decodeAndExecInstr(int instr){
+  int opCode = OpcodeOfInstr(instr);
+  switch(opCode){
+    case ADD:
+      break;
+    case AND:
+      if(ABit(instr) == 0)
+           storeReg(regHigh(instr), and(loadReg(regLow(instr)), loadReg(regHigh(instr))));
+      else storeReg(regHigh(instr), and(immN(5, instr),         loadReg(regHigh(instr))));
+    case BR:
+      break;
+    case JMP:
+      storeReg(PC_REG, loadReg(regMid(instr)));
+    case JSR:
+      break;
+    case LDB:
+      break;
+    case LDW:
+      break;
+    case LEA:
 
 			break;
 		case RTI:
@@ -588,8 +578,6 @@ int decodeAndExecInstr(int instr) {
 
 	}
 }
-
->>>>>>> 52aa145b2b4b38c06d816b5739e240b22e2291fb
 
 void process_instruction(){
   /*  function: process_instruction

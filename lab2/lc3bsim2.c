@@ -493,11 +493,18 @@ int add(int val1, int val2) {
 	return val1 + val2;
 }
 
+int and(int val1, int val2){
+  return val1 & val2;
+}
+
 typedef int (*ALUOP_t)(int, int);
 int ALU(int val1, int val2, ALUOP_t opfn) {
 	return 0;
 }
 
+int fetchInstruction(){
+  return loadWord(loadReg(PC_REG));
+}
 
 void process_instruction(){
   /*  function: process_instruction

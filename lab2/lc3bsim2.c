@@ -536,17 +536,60 @@ int fetchInstr() {
 
 }
 
+void setCC(int result) {
+	if(result < 0) {
+		storeReg(N_CC, 1);
+		storeReg(Z_CC, 0);
+		storeReg(P_CC, 0);
+	}
+	else if (result == 0) {
+		storeReg(N_CC, 0);
+		storeReg(Z_CC, 1);
+		storeReg(P_CC, 0);
+	} 
+	else {
+		storeReg(N_CC, 0);
+		storeReg(Z_CC, 0);
+		storeReg(P_CC, 1);
+	}
+}
+
+int signedImmN(int n, int instr) {
+	int imm = immN(n, instr);
+	if(NthBit(n-1, imm)) {
+		imm |= (-1 << n);
+	}
+	return imm;
+}
+
 int decodeAndExecInstr(int instr) {
 	int opCode = OpcodeOfInstr(instr);
 	switch(opCode) {
 		case ADD:
-			
+			int DR = RegHigh(instr);
+			int SR1 = RegMid(instr);
+			int op1 = LoadReg(SR1);
+			int op2 = ABit(instr) ? ImmN(5, instr) : LoadReg(RegLow(instr));
+			int result = add(op, op2);
+			storeReg(DR, result);
+			setCC(result);
 			break;
 		case AND:
 
 			break;
 		case BR:
-
+			int N = NBit(instr);
+			int Z = ZBit(instr);
+			int P = PBit(instr);
+			int doBranch = 
+				(N && LoadReg(N_CC)) ||
+				(Z && LoadReg(Z_CC)) ||
+				(P && LoadReg(P_CC));
+			if(doBranch) {
+				int PCoffs = signedImmN(9, instr);
+				int addroffs = PCoffs << 1;
+				storeReg(PC_REG, loadReg(PC_REG) + addroffs);
+			}
 			break;
 		case JMP:
 

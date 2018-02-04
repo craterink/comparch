@@ -406,6 +406,18 @@ int main(int argc, char *argv[]) {
 #define Low8bits(x) ((x) & 0xFF)
 #define LeftShiftOneByte(x) ((x) << 8)
 #define RightShiftOneByte(x) ((x) >> 8)
+#define OpcodeOfInstr(x) (((x) & 0xF000) >> 12)
+#define RegHigh(x) (((x) & 0xE00) >> 9)
+#define RegMid(x) (((x) & 0x1C0) >> 6)
+#define RegLow(x) ((x) & 0x0007)
+#define ImmN(n,x) ((x) & ((1 << n) - 1))
+#define NthBit(n,x) (((x) & (1 << n)) >> n)
+#define ABit(x) NthBit(5,x)
+#define DBit(x) NthBit(4,x)
+#define NBit(x) NthBit(11,x)
+#define ZBit(x) NthBit(10,x)
+#define PBit(x) NthBit(9,x)
+#define JSR_ABit(x) NthBit(11,x)
 
 #define SIM_ERROR 4
 
@@ -418,6 +430,21 @@ int main(int argc, char *argv[]) {
 #define BYTES_PER_MEM_LOC 2
 #define LITTLE_END 0
 #define BIG_END 1
+
+#define ADD 0x0001
+#define AND 0x0101
+#define BR  0x0000
+#define JMP 0x1100
+#define JSR 0x0100
+#define LDB 0x0010
+#define LDW 0x0110
+#define LEA 0x1110
+#define RTI 0x1000
+#define SHF 0x1101
+#define STB 0x0011
+#define STW 0x0111
+#define TRAP 0x1111
+#define XOR 0x1001
 
 
 int loadReg(int regNum) {
@@ -488,6 +515,13 @@ void storeWord(int word, int wordVal) {
 }
 
 
+int and(int val1, int val2) {
+	return val1 & val2;
+}
+
+int xor(int val1, int val2) {
+	return val1 ^ val2;
+}
 
 int add(int val1, int val2) {
 	return val1 + val2;
@@ -496,6 +530,59 @@ int add(int val1, int val2) {
 typedef int (*ALUOP_t)(int, int);
 int ALU(int val1, int val2, ALUOP_t opfn) {
 	return 0;
+}
+
+int fetchInstr() {
+
+}
+
+int decodeAndExecInstr(int instr) {
+	int opCode = OpcodeOfInstr(instr);
+	switch(opCode) {
+		case ADD:
+			
+			break;
+		case AND:
+
+			break;
+		case BR:
+
+			break;
+		case JMP:
+
+			break;
+		case JSR:
+
+			break;
+		case LDB:
+
+			break;
+		case LDW:
+
+			break;
+		case LEA:
+
+			break;
+		case RTI:
+
+			break;
+		case SHF:
+
+			break;
+		case STB:
+
+			break;
+		case STW:
+
+			break;
+		case TRAP:
+
+			break;
+		case XOR:
+
+			break;
+
+	}
 }
 
 
@@ -508,7 +595,7 @@ void process_instruction(){
    *       -Execute
    *       -Update NEXT_LATCHES
    */     
-
-
+	int instr = fetchInstr();
+	decodeAndExecInstr(instr);
 }
 

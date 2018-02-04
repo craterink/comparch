@@ -466,8 +466,8 @@ int loadMem(int loc, int byte) {
 }
 
 int loadWord(int word) {
-	int littleEnd = load(word, LITTLE_END);
-	int bigEnd = load(word, BIG_END);
+	int littleEnd = loadMem(word, LITTLE_END);
+	int bigEnd = loadMem(word, BIG_END);
 	/* assume word has been stored correctly */ 
 	return littleEnd | LeftShiftOneByte(bigEnd);
 }
@@ -481,7 +481,7 @@ void storeMem(int loc, int byte, int value) {
 }
 
 void storeWord(int word, int wordVal) {
-	int littleEnd = Low8bits(wordVal);
+	int littleEnd = Low8bits(wordVal); /* protect our memory */
 	int bigEnd = Low8bits(RightShiftOneByte(wordVal));
 	storeMem(word, LITTLE_END, littleEnd);
 	storeMem(word, BIG_END, bigEnd);
@@ -508,7 +508,6 @@ void process_instruction(){
    *       -Execute
    *       -Update NEXT_LATCHES
    */     
-	ALU(0,0,add);
 
 
 }

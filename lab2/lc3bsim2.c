@@ -589,6 +589,11 @@ int decodeAndExecInstr(int instr){
       storeWord(BaseR + addrOffs, wordToStore);
       break;
     case TRAP:
+      DR = 7;
+      wordToStore = loadReg(PC_REG);
+      storeReg(DR, wordToStore);
+      wordToStore = loadWord(ImmN(8, instr));
+      storeReg(PC_REG, wordToStore);
       break;
     case XOR:
       DR = RegHigh(instr);

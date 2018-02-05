@@ -427,8 +427,9 @@ int loadMem(int loc, int byte){
 }
 
 int loadWord(int word){
-  int littleEnd = loadMem(word, LITTLE_END);
-  int bigEnd =    loadMem(word, BIG_END);
+	int memIndex = word/2;
+  int littleEnd = loadMem(memIndex, LITTLE_END);
+  int bigEnd =    loadMem(memIndex, BIG_END);
   /* assume word has been stored correctly */ 
   return littleEnd | LeftShiftOneByte(bigEnd);
 }
@@ -440,11 +441,12 @@ void storeMem(int loc, int byte, int value){
   else exit(SIM_ERROR);
 }
 
-void storeWord(int word, int wordVal){
+void storeWord(int word, int wordVal) {
   int littleEnd = Low8bits(wordVal); /* protect our memory */
   int bigEnd    = Low8bits(RightShiftOneByte(wordVal));
-  storeMem(word, LITTLE_END, littleEnd);
-  storeMem(word, BIG_END,    bigEnd);
+  int memIndex = word / 2;
+  storeMem(memIndex, LITTLE_END, littleEnd);
+  storeMem(memIndex, BIG_END,    bigEnd);
 }
 
 int add(int val1, int val2){ return val1 + val2; }

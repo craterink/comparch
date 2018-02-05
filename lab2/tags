@@ -4,35 +4,86 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+ABit	lc3bsim2.c	415;"	d	file:
+ADD	lc3bsim2.c	434;"	d	file:
+ALU	lc3bsim2.c	/^int ALU(int val1, int val2, ALUOP_t opfn) {$/;"	f
+ALUOP_t	lc3bsim2.c	/^typedef int (*ALUOP_t)(int, int);$/;"	t	file:
+AND	lc3bsim2.c	435;"	d	file:
+BIG_END	lc3bsim2.c	432;"	d	file:
+BR	lc3bsim2.c	436;"	d	file:
+BYTES_PER_MEM_LOC	lc3bsim2.c	430;"	d	file:
 CURRENT_LATCHES	lc3bsim2.c	/^System_Latches CURRENT_LATCHES, NEXT_LATCHES;$/;"	v
+DBit	lc3bsim2.c	416;"	d	file:
 FALSE	lc3bsim2.c	37;"	d	file:
 INSTRUCTION_COUNT	lc3bsim2.c	/^int INSTRUCTION_COUNT;$/;"	v
+ImmN	lc3bsim2.c	413;"	d	file:
+JMP	lc3bsim2.c	437;"	d	file:
+JSR	lc3bsim2.c	438;"	d	file:
+JSR_ABit	lc3bsim2.c	420;"	d	file:
 LC_3b_REGS	lc3bsim2.c	62;"	d	file:
+LDB	lc3bsim2.c	439;"	d	file:
+LDW	lc3bsim2.c	440;"	d	file:
+LEA	lc3bsim2.c	441;"	d	file:
+LITTLE_END	lc3bsim2.c	431;"	d	file:
+LeftShiftOneByte	lc3bsim2.c	407;"	d	file:
 Low16bits	lc3bsim2.c	43;"	d	file:
+Low8bits	lc3bsim2.c	406;"	d	file:
+Lowbit	lc3bsim2.c	405;"	d	file:
+MAX_REG	lc3bsim2.c	424;"	d	file:
 MEMORY	lc3bsim2.c	/^int MEMORY[WORDS_IN_MEM][2];$/;"	v
 N	lc3bsim2.c	/^    N,		\/* n condition bit *\/$/;"	m	struct:System_Latches_Struct	file:
+NBit	lc3bsim2.c	417;"	d	file:
 NEXT_LATCHES	lc3bsim2.c	/^System_Latches CURRENT_LATCHES, NEXT_LATCHES;$/;"	v
+N_CC	lc3bsim2.c	426;"	d	file:
+NthBit	lc3bsim2.c	414;"	d	file:
+OpcodeOfInstr	lc3bsim2.c	409;"	d	file:
 P	lc3bsim2.c	/^    P;		\/* p condition bit *\/$/;"	m	struct:System_Latches_Struct	file:
+PBit	lc3bsim2.c	419;"	d	file:
 PC	lc3bsim2.c	/^  int PC,		\/* program counter *\/$/;"	m	struct:System_Latches_Struct	file:
+PC_REG	lc3bsim2.c	425;"	d	file:
+P_CC	lc3bsim2.c	428;"	d	file:
 REGS	lc3bsim2.c	/^  int REGS[LC_3b_REGS]; \/* register file. *\/$/;"	m	struct:System_Latches_Struct	file:
 RUN_BIT	lc3bsim2.c	/^int RUN_BIT;	\/* run bit *\/$/;"	v
-SIM_ERROR	lc3bsim2.c	406;"	d	file:
+RegHigh	lc3bsim2.c	410;"	d	file:
+RegLow	lc3bsim2.c	412;"	d	file:
+RegMid	lc3bsim2.c	411;"	d	file:
+RightShiftOneByte	lc3bsim2.c	408;"	d	file:
+SHF	lc3bsim2.c	442;"	d	file:
+SIM_ERROR	lc3bsim2.c	422;"	d	file:
+STB	lc3bsim2.c	443;"	d	file:
+STW	lc3bsim2.c	444;"	d	file:
 System_Latches	lc3bsim2.c	/^} System_Latches;$/;"	t	typeref:struct:System_Latches_Struct	file:
 System_Latches_Struct	lc3bsim2.c	/^typedef struct System_Latches_Struct{$/;"	s	file:
+TRAP	lc3bsim2.c	445;"	d	file:
 TRUE	lc3bsim2.c	38;"	d	file:
 WORDS_IN_MEM	lc3bsim2.c	52;"	d	file:
+XOR	lc3bsim2.c	446;"	d	file:
 Z	lc3bsim2.c	/^    Z,		\/* z condition bit *\/$/;"	m	struct:System_Latches_Struct	file:
+ZBit	lc3bsim2.c	418;"	d	file:
+Z_CC	lc3bsim2.c	427;"	d	file:
+add	lc3bsim2.c	/^int add(int val1, int val2) {$/;"	f
+and	lc3bsim2.c	/^int and(int val1, int val2){$/;"	f
 cycle	lc3bsim2.c	/^void cycle() {                                                $/;"	f
+decodeAndExecInstr	lc3bsim2.c	/^int decodeAndExecInstr(int instr) {$/;"	f
+fetchInstruction	lc3bsim2.c	/^int fetchInstruction(){$/;"	f
 get_command	lc3bsim2.c	/^void get_command(FILE * dumpsim_file) {                         $/;"	f
 go	lc3bsim2.c	/^void go() {                                                     $/;"	f
 help	lc3bsim2.c	/^void help() {                                                    $/;"	f
 init_memory	lc3bsim2.c	/^void init_memory() {                                           $/;"	f
 initialize	lc3bsim2.c	/^void initialize(char *program_filename, int num_prog_files) { $/;"	f
+isValidMemAccess	lc3bsim2.c	/^int isValidMemAccess(int loc, int byte) {$/;"	f
+loadMem	lc3bsim2.c	/^int loadMem(int loc, int byte) {$/;"	f
 loadReg	lc3bsim2.c	/^int loadReg(int regNum) {$/;"	f
+loadWord	lc3bsim2.c	/^int loadWord(int word) {$/;"	f
 load_program	lc3bsim2.c	/^void load_program(char *program_filename) {                   $/;"	f
 main	lc3bsim2.c	/^int main(int argc, char *argv[]) {                              $/;"	f
 mdump	lc3bsim2.c	/^void mdump(FILE * dumpsim_file, int start, int stop) {          $/;"	f
 process_instruction	lc3bsim2.c	/^void process_instruction(){$/;"	f
 rdump	lc3bsim2.c	/^void rdump(FILE * dumpsim_file) {                               $/;"	f
 run	lc3bsim2.c	/^void run(int num_cycles) {                                      $/;"	f
+setCC	lc3bsim2.c	/^void setCC(int result) {$/;"	f
+signedImmN	lc3bsim2.c	/^int signedImmN(int n, int instr) {$/;"	f
+storeMem	lc3bsim2.c	/^void storeMem(int loc, int byte, int value) {$/;"	f
 storeReg	lc3bsim2.c	/^void storeReg(int regNum, int value) {$/;"	f
+storeWord	lc3bsim2.c	/^void storeWord(int word, int wordVal) {$/;"	f
+xor	lc3bsim2.c	/^int xor(int val1, int val2) {$/;"	f

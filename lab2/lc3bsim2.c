@@ -6,12 +6,9 @@
 */
 
 /***************************************************************/
-/*                                                             */
 /*   LC-3b Instruction Level Simulator                         */
-/*                                                             */
 /*   EE 460N                                                   */
 /*   The University of Texas at Austin                         */
-/*                                                             */
 /***************************************************************/
 
 #include <assert.h>
@@ -20,15 +17,12 @@
 #include <string.h>
 
 /***************************************************************/
-/*                                                             */
 /* Files: isaprogram   LC-3b machine language program file     */
-/*                                                             */
 /***************************************************************/
 
 /***************************************************************/
 /* These are the functions you'll have to write.               */
 /***************************************************************/
-
 void process_instruction();
 
 /***************************************************************/
@@ -48,33 +42,25 @@ void process_instruction();
 /* MEMORY[A][0] stores the least significant byte of word at word address A
    MEMORY[A][1] stores the most significant byte of word at word address A 
 */
-
 #define WORDS_IN_MEM    0x08000 
 int MEMORY[WORDS_IN_MEM][2];
-
-/***************************************************************/
-
-/***************************************************************/
 
 /***************************************************************/
 /* LC-3b State info.                                           */
 /***************************************************************/
 #define LC_3b_REGS 8
 
-int RUN_BIT;	/* run bit */
-
+int RUN_BIT; /* run bit */
 
 typedef struct System_Latches_Struct{
-
   int PC,		/* program counter */
-    N,		/* n condition bit */
-    Z,		/* z condition bit */
-    P;		/* p condition bit */
+      N,		/* n condition bit */
+      Z,		/* z condition bit */
+      P;		/* p condition bit */
   int REGS[LC_3b_REGS]; /* register file. */
 } System_Latches;
 
 /* Data Structure for Latch */
-
 System_Latches CURRENT_LATCHES, NEXT_LATCHES;
 
 /***************************************************************/
@@ -83,11 +69,8 @@ System_Latches CURRENT_LATCHES, NEXT_LATCHES;
 int INSTRUCTION_COUNT;
 
 /***************************************************************/
-/*                                                             */
 /* Procedure : help                                            */
-/*                                                             */
 /* Purpose   : Print out a list of commands                    */
-/*                                                             */
 /***************************************************************/
 void help() {                                                    
   printf("----------------LC-3b ISIM Help-----------------------\n");
@@ -100,25 +83,18 @@ void help() {
 }
 
 /***************************************************************/
-/*                                                             */
 /* Procedure : cycle                                           */
-/*                                                             */
 /* Purpose   : Execute a cycle                                 */
-/*                                                             */
 /***************************************************************/
-void cycle() {                                                
-
+void cycle(){
   process_instruction();
   CURRENT_LATCHES = NEXT_LATCHES;
   INSTRUCTION_COUNT++;
 }
 
 /***************************************************************/
-/*                                                             */
 /* Procedure : run n                                           */
-/*                                                             */
 /* Purpose   : Simulate the LC-3b for n cycles                 */
-/*                                                             */
 /***************************************************************/
 void run(int num_cycles) {                                      
   int i;
@@ -140,11 +116,8 @@ void run(int num_cycles) {
 }
 
 /***************************************************************/
-/*                                                             */
 /* Procedure : go                                              */
-/*                                                             */
 /* Purpose   : Simulate the LC-3b until HALTed                 */
-/*                                                             */
 /***************************************************************/
 void go() {                                                     
   if (RUN_BIT == FALSE) {
@@ -160,12 +133,9 @@ void go() {
 }
 
 /***************************************************************/ 
-/*                                                             */
 /* Procedure : mdump                                           */
-/*                                                             */
 /* Purpose   : Dump a word-aligned region of memory to the     */
 /*             output file.                                    */
-/*                                                             */
 /***************************************************************/
 void mdump(FILE * dumpsim_file, int start, int stop) {          
   int address; /* this is a byte address */
@@ -173,25 +143,24 @@ void mdump(FILE * dumpsim_file, int start, int stop) {
   printf("\nMemory content [0x%.4x..0x%.4x] :\n", start, stop);
   printf("-------------------------------------\n");
   for (address = (start >> 1); address <= (stop >> 1); address++)
-    printf("  0x%.4x (%d) : 0x%.2x%.2x\n", address << 1, address << 1, MEMORY[address][1], MEMORY[address][0]);
+    printf("  0x%.4x (%d) : 0x%.2x%.2x\n", address << 1, address << 1, MEMORY[address][1],
+                                                                       MEMORY[address][0]);
   printf("\n");
 
   /* dump the memory contents into the dumpsim file */
   fprintf(dumpsim_file, "\nMemory content [0x%.4x..0x%.4x] :\n", start, stop);
   fprintf(dumpsim_file, "-------------------------------------\n");
   for (address = (start >> 1); address <= (stop >> 1); address++)
-    fprintf(dumpsim_file, " 0x%.4x (%d) : 0x%.2x%.2x\n", address << 1, address << 1, MEMORY[address][1], MEMORY[address][0]);
+    fprintf(dumpsim_file, " 0x%.4x (%d) : 0x%.2x%.2x\n", address << 1, address << 1,
+                                            MEMORY[address][1], MEMORY[address][0]);
   fprintf(dumpsim_file, "\n");
   fflush(dumpsim_file);
 }
 
 /***************************************************************/
-/*                                                             */
 /* Procedure : rdump                                           */
-/*                                                             */
 /* Purpose   : Dump current register and bus values to the     */   
 /*             output file.                                    */
-/*                                                             */
 /***************************************************************/
 void rdump(FILE * dumpsim_file) {                               
   int k; 
@@ -200,7 +169,8 @@ void rdump(FILE * dumpsim_file) {
   printf("-------------------------------------\n");
   printf("Instruction Count : %d\n", INSTRUCTION_COUNT);
   printf("PC                : 0x%.4x\n", CURRENT_LATCHES.PC);
-  printf("CCs: N = %d  Z = %d  P = %d\n", CURRENT_LATCHES.N, CURRENT_LATCHES.Z, CURRENT_LATCHES.P);
+  printf("CCs: N = %d  Z = %d  P = %d\n", CURRENT_LATCHES.N, CURRENT_LATCHES.Z,
+                                                             CURRENT_LATCHES.P);
   printf("Registers:\n");
   for (k = 0; k < LC_3b_REGS; k++)
     printf("%d: 0x%.4x\n", k, CURRENT_LATCHES.REGS[k]);
@@ -220,11 +190,7 @@ void rdump(FILE * dumpsim_file) {
 }
 
 /***************************************************************/
-/*                                                             */
 /* Procedure : get_command                                     */
-/*                                                             */
-/* Purpose   : Read a command from standard input.             */  
-/*                                                             */
 /***************************************************************/
 void get_command(FILE * dumpsim_file) {                         
   char buffer[20];
@@ -272,11 +238,8 @@ void get_command(FILE * dumpsim_file) {
 }
 
 /***************************************************************/
-/*                                                             */
 /* Procedure : init_memory                                     */
-/*                                                             */
 /* Purpose   : Zero out the memory array                       */
-/*                                                             */
 /***************************************************************/
 void init_memory() {                                           
   int i;
@@ -288,11 +251,8 @@ void init_memory() {
 }
 
 /**************************************************************/
-/*                                                            */
 /* Procedure : load_program                                   */
-/*                                                            */
 /* Purpose   : Load program and service routines into mem.    */
-/*                                                            */
 /**************************************************************/
 void load_program(char *program_filename) {                   
   FILE * prog;
@@ -334,12 +294,9 @@ void load_program(char *program_filename) {
 }
 
 /************************************************************/
-/*                                                          */
 /* Procedure : initialize                                   */
-/*                                                          */
 /* Purpose   : Load machine language program                */ 
 /*             and set up initial state of the machine.     */
-/*                                                          */
 /************************************************************/
 void initialize(char *program_filename, int num_prog_files) { 
   int i;
@@ -356,9 +313,7 @@ void initialize(char *program_filename, int num_prog_files) {
 }
 
 /***************************************************************/
-/*                                                             */
 /* Procedure : main                                            */
-/*                                                             */
 /***************************************************************/
 int main(int argc, char *argv[]) {                              
   FILE * dumpsim_file;
@@ -399,7 +354,6 @@ int main(int argc, char *argv[]) {
    above.
 
    Begin your code here 	  			       */
-
 /***************************************************************/
 
 #define Lowbit(x) ((x) & 0x1)
@@ -410,8 +364,8 @@ int main(int argc, char *argv[]) {
 #define RegHigh(x) (((x) & 0xE00) >> 9)
 #define RegMid(x) (((x) & 0x1C0) >> 6)
 #define RegLow(x) ((x) & 0x0007)
-#define ImmN(n,x) ((x) & ((1 << n) - 1))
-#define NthBit(n,x) (((x) & (1 << n)) >> n)
+#define ImmN(n,x) ((x) & ((1 << (n)) - 1))
+#define NthBit(n,x) (((x) & (1 << (n))) >> (n))
 #define ABit(x) NthBit(5,x)
 #define DBit(x) NthBit(4,x)
 #define NBit(x) NthBit(11,x)
@@ -445,93 +399,64 @@ int main(int argc, char *argv[]) {
 #define TRAP 0x1111
 #define XOR 0x1001
 
-int loadReg(int regNum) {
-	if(regNum >= 0 && regNum <= MAX_REG)
-		return NEXT_LATCHES.REGS[regNum];
-	else if (regNum == PC_REG)
-		return NEXT_LATCHES.PC;
-	else if (regNum == N_CC)
-		return NEXT_LATCHES.N;
-	else if (regNum == Z_CC)
-		return NEXT_LATCHES.Z;
-	else if (regNum == P_CC)
-		return NEXT_LATCHES.P;
-	else 
-		exit(SIM_ERROR);
+int loadReg(int regNum){
+       if(regNum >= 0 && regNum <= MAX_REG) return NEXT_LATCHES.REGS[regNum];
+  else if(regNum == PC_REG)                 return NEXT_LATCHES.PC;
+  else if(regNum == N_CC)                   return NEXT_LATCHES.N;
+  else if (regNum == Z_CC)                  return NEXT_LATCHES.Z;
+  else if (regNum == P_CC)                  return NEXT_LATCHES.P;
+  else                                      exit(SIM_ERROR);
 }
 
-void storeReg(int regNum, int value) {
-	if(regNum >= 0 && regNum <= MAX_REG)
-		NEXT_LATCHES.REGS[regNum] = Low16bits(value);
-	else if (regNum == PC_REG)
-		NEXT_LATCHES.PC = Low16bits(value);
-	else if (regNum == N_CC)
-		NEXT_LATCHES.N = Lowbit(value);
-	else if (regNum == Z_CC)
-		NEXT_LATCHES.Z = Lowbit(value);
-	else if (regNum == P_CC)
-		NEXT_LATCHES.P = Lowbit(value);
-	else 
-		exit(SIM_ERROR);
+void storeReg(int regNum, int value){
+       if(regNum >= 0 && regNum <= MAX_REG) NEXT_LATCHES.REGS[regNum] = Low16bits(value);
+  else if(regNum == PC_REG)                 NEXT_LATCHES.PC = Low16bits(value);
+  else if (regNum == N_CC)                  NEXT_LATCHES.N = Lowbit(value);
+  else if (regNum == Z_CC)                  NEXT_LATCHES.Z = Lowbit(value);
+  else if (regNum == P_CC)                  NEXT_LATCHES.P = Lowbit(value);
+  else                                      exit(SIM_ERROR);
 }
 
-int isValidMemAccess(int loc, int byte) {
-	return loc < WORDS_IN_MEM 
-				&& loc >= 0
-				&& byte < BYTES_PER_MEM_LOC 
-				&& byte >= 0;
+int isValidMemAccess(int loc, int byte){
+  return loc < WORDS_IN_MEM && loc >= 0 && byte < BYTES_PER_MEM_LOC && byte >= 0;
 }
 
-int loadMem(int loc, int byte) {
-	if(isValidMemAccess(loc, byte)) {
-		return MEMORY[loc][byte];
-	}
-	else
-		exit(SIM_ERROR);
+int loadMem(int loc, int byte){
+  if(isValidMemAccess(loc, byte)) return MEMORY[loc][byte];
+  else                            exit(SIM_ERROR);
 }
 
-int loadWord(int word) {
-	int littleEnd = loadMem(word, LITTLE_END);
-	int bigEnd = loadMem(word, BIG_END);
-	/* assume word has been stored correctly */ 
-	return littleEnd | LeftShiftOneByte(bigEnd);
+int loadWord(int word){
+  int littleEnd = loadMem(word, LITTLE_END);
+  int bigEnd =    loadMem(word, BIG_END);
+  /* assume word has been stored correctly */ 
+  return littleEnd | LeftShiftOneByte(bigEnd);
 }
 
-void storeMem(int loc, int byte, int value) {
-	if(isValidMemAccess(loc,byte)) {
-		MEMORY[loc][byte] = value; /* TODO: mask value according to how mem is stored */
-	}
-	else
-	exit(SIM_ERROR);
+void storeMem(int loc, int byte, int value){
+  if(isValidMemAccess(loc,byte)){
+    MEMORY[loc][byte] = value; /* TODO: mask value according to how mem is stored */
+  }
+  else exit(SIM_ERROR);
 }
 
-void storeWord(int word, int wordVal) {
-	int littleEnd = Low8bits(wordVal); /* protect our memory */
-	int bigEnd = Low8bits(RightShiftOneByte(wordVal));
-	storeMem(word, LITTLE_END, littleEnd);
-	storeMem(word, BIG_END, bigEnd);
+void storeWord(int word, int wordVal){
+  int littleEnd = Low8bits(wordVal); /* protect our memory */
+  int bigEnd    = Low8bits(RightShiftOneByte(wordVal));
+  storeMem(word, LITTLE_END, littleEnd);
+  storeMem(word, BIG_END,    bigEnd);
 }
 
-int xor(int val1, int val2) {
-	return val1 ^ val2;
-}
+int xor(int val1, int val2){ return val1 ^ val2; }
 
-int add(int val1, int val2) {
-	return val1 + val2;
-}
+int add(int val1, int val2){ return val1 + val2; }
 
-int and(int val1, int val2){
-  return val1 & val2;
-}
+int and(int val1, int val2){ return val1 & val2; }
 
 typedef int (*ALUOP_t)(int, int);
-int ALU(int val1, int val2, ALUOP_t opfn) {
-	return 0;
-}
+int ALU(int val1, int val2, ALUOP_t opfn){ return 0;}
 
-int fetchInstruction(){
-  return loadWord(loadReg(PC_REG));
-}
+int fetchInstr(){ return loadWord(loadReg(PC_REG));}
 
 void setCC(int result){
   if(result < 0){
@@ -552,99 +477,96 @@ void setCC(int result){
 }
 
 int signedImmN(int n, int instr){
-  int imm = immN(n, instr);
-  if(NthBit(n-1, imm)){
-    imm |= (-1 << n);
-  }
-  return imm;
+                   int imm  = ImmN(n, instr);
+  if(NthBit(n-1, imm)) imm |= (-1 << n);
+                return imm;
 }
 
-int decodeAndExecInstr(int instr) {
+int decodeAndExecInstr(int instr){
   int opCode = OpcodeOfInstr(instr);
-  switch(opCode) {
+  int DR, BaseR, SR, SR1, SR2, N, Z, P, PC, PCoffs, addrOffs, op, op1, op2, shiftRight,
+      amt, result, doBranch, subrAddr, wordToStore, loadedVal; 
+  switch(opCode){
     case ADD:
-      int DR = RegHigh(instr);
-      int SR1 = RegMid(instr);
-      int op1 = LoadReg(SR1);
-      int op2 = ABit(instr) ? ImmN(5, instr) : LoadReg(RegLow(instr));
-      int result = add(op, op2);
+      DR = RegHigh(instr);
+      SR1 = RegMid(instr);
+      op1 = loadReg(SR1);
+      op2 = ABit(instr) ? ImmN(5, instr) : loadReg(RegLow(instr));
+      result = add(op, op2);
       storeReg(DR, result);
       setCC(result);
       break;
     case AND:
-      int DR = RegHigh(instr);
-      int SR1 = RegMid(instr);
-      int op1 = LoadReg(SR1);
-      int op2 = ABit(instr) ? ImmN(5, instr) : LoadReg(RegLow(instr));
-      int result = and(op1, op2);
-      storeReg(DR, result);
-      setCC(result);
       break;
     case BR:
-      int N = NBit(instr);
-      int Z = ZBit(instr);
-      int P = PBit(instr);
-      int doBranch = (N && LoadReg(N_CC)) ||
-		     (Z && LoadReg(Z_CC)) ||
-		     (P && LoadReg(P_CC));
+      N = NBit(instr);
+      Z = ZBit(instr);
+      P = PBit(instr);
+      doBranch = (N && loadReg(N_CC)) || (Z && loadReg(Z_CC)) || (P && loadReg(P_CC));
       if(doBranch){
-        int PCoffs = signedImmN(9, instr);
-        int addroffs = PCoffs << 1;
-        storeReg(PC_REG, loadReg(PC_REG) + addroffs);
+        PCoffs = signedImmN(9, instr);
+        addrOffs = PCoffs << 1;
+        storeReg(PC_REG, loadReg(PC_REG) + addrOffs);
       }
       break;
     case JMP:
-      storeReg(PC_REG, loadReg(regMid(instr)));
       break;
     case JSR:
       storeReg(7, loadReg(PC));
-      int subrAddr = JSR_ABit(instr) 
-                                 ? loadReg(PC_REG) + (signedImmN(11, instr) << 1) :
-				 loadReg(RegMid(instr));
+      subrAddr = JSR_ABit(instr) ? loadReg(PC_REG) + (signedImmN(11, instr) << 1) :
+			           loadReg(RegMid(instr));
       storeReg(PC_REG, subrAddr);
       break;
     case LDB:
-      int DR = RegHigh(instr);
-      int BaseR = RegMid(instr);
-      int boffs6 = signedImmN(6, instr);
-      int loc = (BaseR + boffs6);
-      int byte;
-      if((loc % 2) == 0) byte = 0;
-      else               byte = 1;
-      loc = loc / 2;
-      storeReg(DR, loadMem(loc, byte));
       break;
-
-		case LDW:
-			int DR = RegHigh(instr);
-			int BaseR = RegMid(instr);
-			int addrOffs = signedImmN(6, instr) << 1;
-			int loadedVal = LoadWord(BaserR + addrOffs);
-			storeReg(DR, loadedVal);
-			setCC(loadedVal);
-			break;
-		case LEA:
-
-			break;
-		case SHF:
-			int shiftRight = DBit(instr);
-			int amt = ImmN(4, instr);
-			if(shiftRight)
-			break;
-		case STB:
-
-			break;
-		case STW:
-
-			break;
-		case TRAP:
-
-			break;
-		case XOR:
-
-			break;
-
-	}
+    case LDW:
+      DR = RegHigh(instr);
+      BaseR = RegMid(instr);
+      addrOffs = signedImmN(6, instr);
+      loadedVal = loadWord(BaseR + addrOffs);
+      storeReg(DR, loadedVal);
+      setCC(loadedVal);
+      break;
+    case LEA:
+      break;
+    case SHF:
+      DR = RegHigh(instr);
+      SR = RegMid(instr);
+      shiftRight = DBit(instr);
+      op = loadReg(SR);
+      amt = ImmN(4, instr);
+      if(shiftRight){
+        if(ABit(instr)){ /* arithmetic */
+          result = op >> amt; }
+        else {           /* logical */
+          result = (op >> amt) & (1 << (16 - amt) - 1);
+        }
+      }
+      else { result = op << amt; }
+      storeReg(DR, result);
+      setCC(result);
+      break;
+    case STB:
+      break;
+    case STW:
+      SR1 = RegHigh(instr);
+      BaseR = RegMid(instr);
+      addrOffs = signedImmN(6, instr);
+      wordToStore = loadReg(SR1);
+      storeWord(BaseR + addrOffs, wordToStore);
+      break;
+    case TRAP:
+      break;
+    case XOR:
+      DR = RegHigh(instr);
+      SR1 = RegMid(instr);
+      op1 = loadReg(SR1);
+      op2 = ABit(instr) ? signedImmN(5, instr) : loadReg(RegLow(instr));
+      result = xor(op1, op2);
+      storeReg(DR, result);
+      setCC(result);
+      break;
+  }
 }
 
 void process_instruction(){

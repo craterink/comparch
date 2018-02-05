@@ -377,27 +377,27 @@ int main(int argc, char *argv[]) {
 
 #define MAX_REG 7
 #define PC_REG -1
-#define N_CC -2
-#define Z_CC -3
-#define P_CC -4
+#define N_CC   -2
+#define Z_CC   -3
+#define P_CC   -4
 
 #define BYTES_PER_MEM_LOC 2
-#define LITTLE_END 0
-#define BIG_END 1
+#define LITTLE_END        0
+#define BIG_END           1
 
-#define ADD 0x0001
-#define AND 0x0101
-#define BR  0x0000
-#define JMP 0x1100
-#define JSR 0x0100
-#define LDB 0x0010
-#define LDW 0x0110
-#define LEA 0x1110
-#define SHF 0x1101
-#define STB 0x0011
-#define STW 0x0111
+#define ADD  0x0001
+#define AND  0x0101
+#define BR   0x0000
+#define JMP  0x1100
+#define JSR  0x0100
+#define LDB  0x0010
+#define LDW  0x0110
+#define LEA  0x1110
+#define SHF  0x1101
+#define STB  0x0011
+#define STW  0x0111
 #define TRAP 0x1111
-#define XOR 0x1001
+#define XOR  0x1001
 
 int loadReg(int regNum){
        if(regNum >= 0 && regNum <= MAX_REG) return NEXT_LATCHES.REGS[regNum];
@@ -447,11 +447,9 @@ void storeWord(int word, int wordVal){
   storeMem(word, BIG_END,    bigEnd);
 }
 
-int xor(int val1, int val2){ return val1 ^ val2; }
-
 int add(int val1, int val2){ return val1 + val2; }
-
 int and(int val1, int val2){ return val1 & val2; }
+int xor(int val1, int val2){ return val1 ^ val2; }
 
 typedef int (*ALUOP_t)(int, int);
 int ALU(int val1, int val2, ALUOP_t opfn){ return 0;}
@@ -485,18 +483,25 @@ int signedImmN(int n, int instr){
 int decodeAndExecInstr(int instr){
   int opCode = OpcodeOfInstr(instr);
   int DR, BaseR, SR, SR1, SR2, N, Z, P, PC, PCoffs, addrOffs, op, op1, op2, shiftRight,
-      amt, result, doBranch, subrAddr, wordToStore, loadedVal; 
+      amt, result, doBranch, subrAddr, wordToStore, loadedVal, byte;
   switch(opCode){
     case ADD:
-      DR = RegHigh(instr);
-      SR1 = RegMid(instr);
-      op1 = loadReg(SR1);
-      op2 = ABit(instr) ? ImmN(5, instr) : loadReg(RegLow(instr));
-      result = add(op, op2);
+      DR     = RegHigh(instr);
+      SR1    = RegMid(instr);
+      op1    = loadReg(SR1);
+      op2    = ABit(instr) ? ImmN(5, instr) : loadReg(RegLow(instr));
+      result = add(op1, op2);
       storeReg(DR, result);
       setCC(result);
       break;
     case AND:
+      DR     = RegHigh(instr);
+      SR1    = RegMid(instr);
+      op1    = loadReg(SR1);
+      op2    = ABit(instr) ? ImmN(5, instr) : loadReg(RegLow(instr));
+      result = and(op1, op2);
+      storeReg(DR, result);
+      setCC(result);
       break;
     case BR:
       N = NBit(instr);
@@ -510,6 +515,8 @@ int decodeAndExecInstr(int instr){
       }
       break;
     case JMP:
+      BaseR = RegMid(instr);
+      storeReg(PC_REG, BaseR);
       break;
     case JSR:
       storeReg(7, loadReg(PC));
@@ -518,23 +525,39 @@ int decodeAndExecInstr(int instr){
       storeReg(PC_REG, subrAddr);
       break;
     case LDB:
+      DR        = RegHigh(instr);
+      BaseR     = RegMid(instr);
+      addrOffs  = loadReg(BaseR) + signedImmN(6, instr);
+      if((addrOffs % 2) == 0)
+           byte = 0;
+      else                   
+           byte = 1;
+      loadedVal = loadMem(addrOffs / 2, byte);
+      storeReg(DR, loadedVal);
+      setCC(loadedVal);
       break;
     case LDW:
-      DR = RegHigh(instr);
-      BaseR = RegMid(instr);
-      addrOffs = signedImmN(6, instr);
+      DR        = RegHigh(instr);
+      BaseR     = RegMid(instr);
+      addrOffs  = signedImmN(6, instr);
       loadedVal = loadWord(BaseR + addrOffs);
       storeReg(DR, loadedVal);
       setCC(loadedVal);
       break;
     case LEA:
+      DR       = RegHigh(instr);
+      addrOffs = signedImmN(9, instr);
+      PC       = loadReg(PC_REG);
+      PCoffs   = PC + addrOffs;
+      storeReg(DR, PCoffs);
+      setCC(PCoffs);
       break;
     case SHF:
-      DR = RegHigh(instr);
-      SR = RegMid(instr);
+      DR         = RegHigh(instr);
+      SR         = RegMid(instr);
       shiftRight = DBit(instr);
-      op = loadReg(SR);
-      amt = ImmN(4, instr);
+      op         = loadReg(SR);
+      amt        = ImmN(4, instr);
       if(shiftRight){
         if(ABit(instr)){ /* arithmetic */
           result = op >> amt; }
@@ -542,17 +565,27 @@ int decodeAndExecInstr(int instr){
           result = (op >> amt) & (1 << (16 - amt) - 1);
         }
       }
-      else { result = op << amt; }
+      else {
+          result = op << amt;
+      }
       storeReg(DR, result);
       setCC(result);
       break;
     case STB:
+      SR       = RegHigh(instr);
+      BaseR    = RegMid(instr);
+      addrOffs = loadReg(BaseR) + signedImmN(6, instr);
+      if((addrOffs % 2) == 0) 
+        byte   = 0;
+      else                   
+        byte   = 1;
+      storeMem(addrOffs / 2, byte, loadReg(SR));
       break;
     case STW:
-      SR1 = RegHigh(instr);
+      SR = RegHigh(instr);
       BaseR = RegMid(instr);
       addrOffs = signedImmN(6, instr);
-      wordToStore = loadReg(SR1);
+      wordToStore = loadReg(SR);
       storeWord(BaseR + addrOffs, wordToStore);
       break;
     case TRAP:

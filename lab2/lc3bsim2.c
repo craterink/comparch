@@ -389,15 +389,15 @@ int main(int argc, char *argv[]) {
 #define AND  0x0101
 #define BR   0x0000
 #define JMP  0x1100
-#define JSR  0x0100
-#define LDB  0x0010
-#define LDW  0x0110
-#define LEA  0x1110
-#define SHF  0x1101
-#define STB  0x0011
-#define STW  0x0111
-#define TRAP 0x1111
-#define XOR  0x1001
+#define JSR  4
+#define LDB  2
+#define LDW  6
+#define LEA  14
+#define SHF  13
+#define STB  3
+#define STW  7
+#define TRAP 15
+#define XOR  9
 
 int loadReg(int regNum){
        if(regNum >= 0 && regNum <= MAX_REG) return NEXT_LATCHES.REGS[regNum];
@@ -491,7 +491,7 @@ int decodeAndExecInstr(int instr){
       DR     = RegHigh(instr);
       SR1    = RegMid(instr);
       op1    = loadReg(SR1);
-      op2    = ABit(instr) ? ImmN(5, instr) : loadReg(RegLow(instr));
+      op2    = ABit(instr) ? signedImmN(5, instr) : loadReg(RegLow(instr));
       result = add(op1, op2);
       storeReg(DR, result);
       setCC(result);
@@ -500,7 +500,7 @@ int decodeAndExecInstr(int instr){
       DR     = RegHigh(instr);
       SR1    = RegMid(instr);
       op1    = loadReg(SR1);
-      op2    = ABit(instr) ? ImmN(5, instr) : loadReg(RegLow(instr));
+      op2    = ABit(instr) ? signedImmN(5, instr) : loadReg(RegLow(instr));
       result = and(op1, op2);
       storeReg(DR, result);
       setCC(result);
@@ -619,6 +619,7 @@ void process_instruction(){
    *       -Update NEXT_LATCHES
    */     
 	int instr = fetchInstr();
+	storeReg(PC_REG, loadReg(PC_REG) + 2);
 	decodeAndExecInstr(instr);
 }
 

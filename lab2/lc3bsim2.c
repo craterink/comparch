@@ -356,6 +356,8 @@ int main(int argc, char *argv[]) {
    Begin your code here 	  			       */
 /***************************************************************/
 
+#define Highbit(x) (((x) & 0x8000) >> 15)
+#define isNeg(x) (((x) < 0) || (Highbit((x))))
 #define Lowbit(x) ((x) & 0x1)
 #define Low8bits(x) ((x) & 0xFF)
 #define LeftShiftOneByte(x) ((x) << 8)
@@ -459,7 +461,7 @@ int ALU(int val1, int val2, ALUOP_t opfn){ return 0;}
 int fetchInstr(){ return loadWord(loadReg(PC_REG));}
 
 void setCC(int result){
-  if(result < 0){
+  if(isNeg(result)){
     storeReg(N_CC, 1);
     storeReg(Z_CC, 0);
     storeReg(P_CC, 0);
@@ -485,8 +487,7 @@ int signedImmN(int n, int instr){
 int decodeAndExecInstr(int instr){
   int opCode = OpcodeOfInstr(instr);
   int DR, BaseR, SR, SR1, SR2, N, Z, P, PC, PCoffs, addrOffs, op, op1, op2, shiftRight,
-      amt, result, doBranch, subrAddr, wordToStore, loadedVal, byte;
-
+      amt, result, doBranch, subrAddr, wordToStore, loadedVal, byte, addr;
   switch(opCode){
     case ADD:
       DR     = RegHigh(instr);
@@ -519,10 +520,10 @@ int decodeAndExecInstr(int instr){
       break;
     case JMP:
       BaseR = RegMid(instr);
-      storeReg(PC_REG, BaseR);
+      storeReg(PC_REG, loadReg(BaseR));
       break;
     case JSR:
-      storeReg(7, loadReg(PC));
+      storeReg(7, loadReg(PC_REG));
       subrAddr = JSR_ABit(instr) ? loadReg(PC_REG) + (signedImmN(11, instr) << 1) :
 			           loadReg(RegMid(instr));
       storeReg(PC_REG, subrAddr);
@@ -542,17 +543,17 @@ int decodeAndExecInstr(int instr){
     case LDW:
       DR        = RegHigh(instr);
       BaseR     = RegMid(instr);
-      addrOffs  = signedImmN(6, instr);
-      loadedVal = loadWord(BaseR + addrOffs);
+      addrOffs  = signedImmN(6, instr) << 1;
+      loadedVal = loadWord(loadReg(BaseR) + addrOffs);
       storeReg(DR, loadedVal);
       setCC(loadedVal);
       break;
     case LEA:
       DR       = RegHigh(instr);
-      addrOffs = signedImmN(9, instr);
+      addrOffs = signedImmN(9, instr) << 1;
       PC       = loadReg(PC_REG);
-      PCoffs   = PC + addrOffs;
-      storeReg(DR, PCoffs);
+      addr   = PC + addrOffs;
+      storeReg(DR, addr);
       setCC(PCoffs);
       break;
     case SHF:
@@ -563,9 +564,12 @@ int decodeAndExecInstr(int instr){
       amt        = ImmN(4, instr);
       if(shiftRight){
         if(ABit(instr)){ /* arithmetic */
-          result = op >> amt; }
+          result = isNeg(op) ?
+			  ((op >> amt) + Low16bits(0xffff << (16-amt))) :
+			  op >> amt; 
+		}
         else {           /* logical */
-          result = (op >> amt) & (1 << (16 - amt) - 1);
+          result = (op >> amt) & ((1 << (16 - amt)) - 1);
         }
       }
       else {
@@ -587,9 +591,9 @@ int decodeAndExecInstr(int instr){
     case STW:
       SR = RegHigh(instr);
       BaseR = RegMid(instr);
-      addrOffs = signedImmN(6, instr);
+      addrOffs = signedImmN(6, instr) << 1;
       wordToStore = loadReg(SR);
-      storeWord(BaseR + addrOffs, wordToStore);
+      storeWord(loadReg(BaseR) + addrOffs, wordToStore);
       break;
     case TRAP:
       DR = 7;

@@ -554,7 +554,6 @@ int decodeAndExecInstr(int instr){
       PC       = loadReg(PC_REG);
       addr   = PC + addrOffs;
       storeReg(DR, addr);
-      setCC(PCoffs);
       break;
     case SHF:
       DR         = RegHigh(instr);

@@ -385,10 +385,10 @@ int main(int argc, char *argv[]) {
 #define LITTLE_END        0
 #define BIG_END           1
 
-#define ADD  0x0001
-#define AND  0x0101
-#define BR   0x0000
-#define JMP  0x1100
+#define ADD  1
+#define AND  5
+#define BR   0
+#define JMP  12
 #define JSR  4
 #define LDB  2
 #define LDW  6
@@ -486,6 +486,7 @@ int decodeAndExecInstr(int instr){
   int opCode = OpcodeOfInstr(instr);
   int DR, BaseR, SR, SR1, SR2, N, Z, P, PC, PCoffs, addrOffs, op, op1, op2, shiftRight,
       amt, result, doBranch, subrAddr, wordToStore, loadedVal, byte;
+
   switch(opCode){
     case ADD:
       DR     = RegHigh(instr);

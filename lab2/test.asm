@@ -1,12 +1,11 @@
     .orig x3000
 
      AND R0, R0, #0 ; R0 = 0
-     AND R0, R0, #1 ; R0 = 1
-     AND R0, R0, R0 ; R0 = 1
-     AND R1, R1, #0 ; R1 = 0
-     AND R0, R0, R1 ; R0 = 1
-     AND R0, R0, #-1; R0 = 0xFFFF
-     AND R1, R0, R1 ; R1 = 0xFFFF
+     ADD R0, R0, #1 ; R0 = 1
+     AND R0, R0, #0 ; R0 = 0
+     ADD R0, R0, #-1; R0 = -1
+     AND R0, R0, #-1; R0 = -1
+     AND R0, R0, #0 ; R0 = 0
 
      LEA R0, func   ; R0 ->func
      JMP R0
@@ -24,6 +23,8 @@ func LEA R1, val    ; R1 = ->val
      LEA R1, func   ; R1 = ->func
      RET            ; PC = R7
 
-val  .fill 0xBBAA
-val1 .fill 0xDDCC
+val  .fill xBBAA
+val1 .fill xDDCC
+
+     .end
 

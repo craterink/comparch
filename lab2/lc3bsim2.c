@@ -487,7 +487,7 @@ int signedImmN(int n, int instr){
 int decodeAndExecInstr(int instr){
   int opCode = OpcodeOfInstr(instr);
   int DR, BaseR, SR, SR1, SR2, N, Z, P, PC, PCoffs, addrOffs, op, op1, op2, shiftRight,
-      amt, result, doBranch, subrAddr, wordToStore, loadedVal, byte, addr;
+      amt, result, doBranch, subrAddr, wordToStore, loadedVal, byte, addr, temp;
   switch(opCode){
     case ADD:
       DR     = RegHigh(instr);
@@ -523,10 +523,11 @@ int decodeAndExecInstr(int instr){
       storeReg(PC_REG, loadReg(BaseR));
       break;
     case JSR:
-      storeReg(7, loadReg(PC_REG));
+	  temp = loadReg(PC_REG);
       subrAddr = JSR_ABit(instr) ? loadReg(PC_REG) + (signedImmN(11, instr) << 1) :
 			           loadReg(RegMid(instr));
       storeReg(PC_REG, subrAddr);
+	  storeReg(7, temp);
       break;
     case LDB:
       DR        = RegHigh(instr);
@@ -554,7 +555,6 @@ int decodeAndExecInstr(int instr){
       PC       = loadReg(PC_REG);
       addr   = PC + addrOffs;
       storeReg(DR, addr);
-      setCC(PCoffs);
       break;
     case SHF:
       DR         = RegHigh(instr);

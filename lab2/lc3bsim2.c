@@ -484,6 +484,14 @@ int signedImmN(int n, int instr){
                 return imm;
 }
 
+int signedByteToWord(int byte) {
+	if(NthBit(7, byte)) {
+		return (byte | 0xff00); /* sign extend */
+	}
+	else
+		return byte;
+}
+
 int decodeAndExecInstr(int instr){
   int opCode = OpcodeOfInstr(instr);
   int DR, BaseR, SR, SR1, SR2, N, Z, P, PC, PCoffs, addrOffs, op, op1, op2, shiftRight,
@@ -538,7 +546,8 @@ int decodeAndExecInstr(int instr){
       else                   
            byte = 1;
       loadedVal = loadMem(addrOffs / 2, byte);
-      storeReg(DR, loadedVal);
+      loadedVal = signedByteToWord(loadedVal);
+	  storeReg(DR, loadedVal);
       setCC(loadedVal);
       break;
     case LDW:

@@ -11,3 +11,7 @@ turnin
 **/tags
 lab2/lab2
 lab2/lab2debug
+**/*.obj
+lab3/lab3
+lab3/lab3debug
+lab3/dumpsim

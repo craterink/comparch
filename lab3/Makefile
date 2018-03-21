@@ -1,6 +1,6 @@
 include ../Makefile
 
-IO_FILES = ucode3 tc.obj
+IO_FILES = ucode3 tg.obj
 FILES = *.c
 OUT_EXE = lab3
 DEBUG_EXE = lab3debug

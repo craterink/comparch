@@ -1,7 +1,7 @@
 /*
    Name 1: Cooper Raterink
    UTEID 1: cdr2678
-   */
+*/
 
 /***************************************************************/
 /*                                                             */
@@ -799,7 +799,7 @@ int cycle_num = 0;
 void cycle_memory() {
 	int *cui = CURRENT_LATCHES.MICROINSTRUCTION;
 	if(GetMIO_EN(cui)) {
-		if(cycle_num++ == LC3_MEM_CYCLES - 1) {
+		if(++cycle_num == LC3_MEM_CYCLES - 1) {
 			/* latch ready bit */
 			NEXT_LATCHES.READY = 1;
 		} else {
@@ -886,8 +886,8 @@ void eval_bus_drivers() {
 	}
 	if(GetGATE_SHF(cuinstr)) {
 		int op = SR1_OUT;
-		int amt = ImmN(6, IR);
-		int shiftRight = !GetLSHF1(cuinstr);
+		int amt = ImmN(4, IR);
+		int shiftRight = DBit(IR);
 		int result;  
 		if(shiftRight){
 			if(ABit(IR)){ /* arithmetic */
@@ -925,6 +925,7 @@ void eval_bus_drivers() {
  */       
 void drive_bus() {
 	int *cuinstr = CURRENT_LATCHES.MICROINSTRUCTION; 
+	BUS = 0;
 	if(GetGATE_MARMUX(cuinstr)) {
 		BUS = GATE_MARMUX_IN;
 	}
@@ -968,7 +969,9 @@ void latch_datapath_values() {
 		int isWord = GetDATA_SIZE(cuinstr);
 		if(GetMIO_EN(CURRENT_LATCHES.MICROINSTRUCTION)) {
 			/* need to check R/W bit? */
-			NEXT_LATCHES.MDR = loadWord(CURRENT_LATCHES.MAR);
+			if(CURRENT_LATCHES.READY) {
+				NEXT_LATCHES.MDR = loadWord(CURRENT_LATCHES.MAR);
+			}
 		} else {
 			int mar0 = Lowbit(CURRENT_LATCHES.MAR);
 			if(isWord) {
@@ -985,7 +988,7 @@ void latch_datapath_values() {
 			case PCMUX_BUS:
 				PCMUX_OUT = BUS;
 				break;
-			case PCMUX_ADDEr:
+			case PCMUX_ADDER:
 				PCMUX_OUT = ADDRADDER_OUT;
 				break;
 			case PCMUX_INCR2:
@@ -996,8 +999,21 @@ void latch_datapath_values() {
 	}
 
 	if(GetLD_REG(cuinstr)) {
-		int DR = RegHigh(CURRENT_LATCHES.IR);
+		int DR = GetDRMUX(cuinstr) ? 7 : RegHigh(CURRENT_LATCHES.IR);
 		NEXT_LATCHES.REGS[DR] = Low16bits(BUS);
+	}
+
+	if(GetLD_BEN(cuinstr)) {
+		int IR = CURRENT_LATCHES.IR;
+		int IR_N = NthBit(11,IR);
+		int IR_Z = NthBit(10,IR);
+		int IR_P = NthBit(9,IR);
+		
+		int N = CURRENT_LATCHES.N;
+		int Z = CURRENT_LATCHES.Z;
+		int P = CURRENT_LATCHES.P;
+
+		NEXT_LATCHES.BEN = (N&&IR_N) || (Z&&IR_Z) || (P&&IR_P);
 	}
 
 	if(GetR_W(cuinstr) == RW_WR) {
@@ -1008,7 +1024,7 @@ void latch_datapath_values() {
 			} else {
 				int mar0 = Lowbit(CURRENT_LATCHES.MAR);
 				storeMem(CURRENT_LATCHES.MAR / 2, mar0,
-						mar0 ? Low8bits(CURRENT_LATCHES.MDR) : High8bits(CURRENT_LATCHES.MDR));
+						mar0 ? High8bits(CURRENT_LATCHES.MDR) : Low8bits(CURRENT_LATCHES.MDR));
 			}
 		}
 	}
